@@ -1,3 +1,10 @@
+@import "tailwindcss";
+
+@theme {
+  --color-sidebar-primary: #2C2E49;
+  --color-card-background: #F5F9FF
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
