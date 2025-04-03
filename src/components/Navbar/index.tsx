@@ -1,71 +1,49 @@
-import React, { useEffect } from "react";
-import {
-  Accordion,
-  AccordionItem,
-  ControlledAccordion,
-  useAccordionProvider,
-} from "@szhsin/react-accordion";
+import React from "react";
 import { useLocation } from "react-router";
-
-// components
-import SubRoute from "./SubRoute";
-import Route from "./Route";
-
-// data
-import { links, home } from "./data";
-import HomeRoute from "./HomeRoute";
+import bell from "@/assets/bell.svg";
+import user from "@/assets/user.svg";
+import LiveBadges from "@/modules/home/screens/Dashboard/components/LiveBadges";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
 
-  const providerValue = useAccordionProvider({
-    allowMultiple: true,
-    transition: true,
-    transitionTimeout: 500,
-  });
-
-  useEffect(() => {
-    console.log("navbar useEffect")
-    // const normalizePath = (path: string) => path.replace(/\/$/, ""); // Remove trailing slashes
-    // const currentPath = normalizePath(location.pathname);
-    // location.pathname.includes(item.route);
-    const activeRoute = links.find((link) =>
-      location.pathname.includes(link.route)
-    );
-
-    if (activeRoute) providerValue.toggle(activeRoute.route);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Determine the title based on the current route pathname
+  const getTitle = () => {
+    switch (location.pathname) {
+      case "/credits":
+        return "Credits";
+      case "/users":
+        return "Users";
+      case "/scooters":
+        return "Scooters";
+      default:
+        return "";
+    }
+  };
 
   return (
-    <nav className="w-64 h-full bg-primary-500 px-5 py-1.5 flex flex-col">
-      <ControlledAccordion providerValue={providerValue} className="w-full">
-        <HomeRoute item={home} />
-        {links.map((link) => (
-          <AccordionItem
-            className="w-full cursor-pointer"
-            header={({ state }) => <Route item={link} isOpen={state.isEnter} />}
-            key={link.title}
-            itemKey={link.route}
-          >
-            <Accordion
-              className="flex flex-col gap-y-2"
-              transition
-              transitionTimeout={250}
-            >
-              {link.subroutes.map((subroute) => (
-                <AccordionItem
-                  header={() => <SubRoute item={subroute} />}
-                  key={subroute.title}
-                  itemKey={subroute.route}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              ))}
-            </Accordion>
-          </AccordionItem>
-        ))}
-      </ControlledAccordion>
-    </nav>
+    <div className="flex w-full justify-between items-center">
+      {location.pathname === "/" ? (
+        <LiveBadges />
+      ) : (
+        <h1 className="text-3xl font-bold">{getTitle()}</h1>
+      )}
+      <div className="flex items-end gap-x-4">
+        <div className="w-9 h-9 flex items-center bg-card-background justify-center rounded-full border-1 text-center border-border-primary">
+          <img width={16} height={16} src={bell} alt="icon" />
+        </div>
+        <div className="flex justify-center bg-card-background items-center px-4 py-1 gap-x-2 h-9 border border-border-primary rounded-full">
+          <img
+            width={16}
+            height={16}
+            src={user}
+            style={{ filter: "brightness(0) saturate(100%)" }}
+            alt="icon"
+          />
+          <span className="font-bold text-sm">Dave Adams</span>
+        </div>
+      </div>
+    </div>
   );
 };
 
