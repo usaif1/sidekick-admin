@@ -2,7 +2,10 @@
 
 @theme {
   --color-sidebar-primary: #2C2E49;
-  --color-card-background: #F5F9FF
+  --color-card-background: #F5F9FF;
+  --color-btn-primary: #19F27A;
+  --color-btn-secondary: #F5F9FF;
+  --color-border-primary: #84A1CA;
 }
 
 :root {
