@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import sidekick from "@/assets/sidekick-logo.png"
 import { useNavigate } from 'react-router';
 
@@ -9,7 +9,7 @@ const SplitLoginCard = () => {
     password: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     console.log('Login attempted with:', credentials);
     navigate('/');
