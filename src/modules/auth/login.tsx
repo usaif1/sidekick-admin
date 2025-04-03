@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import sidekick from "@/assets/sidekick-logo.png"
+import { useNavigate } from 'react-router';
 
 const SplitLoginCard = () => {
+  const navigate = useNavigate();
   const [credentials, setCredentials] = useState({
     loginId: '',
     password: ''
@@ -9,6 +12,7 @@ const SplitLoginCard = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Login attempted with:', credentials);
+    navigate('/');
   };
 
   return (
@@ -16,9 +20,9 @@ const SplitLoginCard = () => {
       {/* Main Container */}
       <div className="bg-white rounded-lg shadow-xl w-[600px] h-[600px] relative overflow-hidden rounded-t-[20px]">
         {/* Upper Half (Empty) */}
-        <div className=" bg-[#18F27A] h-[200px] rounded-t-[20px]">
+        <div className=" bg-[#18F27A] flex items-center justify-center h-[200px] rounded-t-[20px]">
           {/* Optional: Add decorative elements here */}
-          <img src="" alt="" />
+          <img width={280} height={40} src={sidekick} alt="sidekick_logo" />
         </div>
 
         {/* Lower Half (Form) */}

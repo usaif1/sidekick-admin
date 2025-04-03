@@ -2,7 +2,6 @@ import React from "react";
 import logo from "@/assets/logo.png";
 import { links } from "./data";
 import { Link } from "react-router";
-import icon from "@/assets/icon.svg";
 
 const Sidebar: React.FC = () => {
   return (
@@ -17,7 +16,7 @@ const Sidebar: React.FC = () => {
               className="text-white font-bold"
             >
               <div className="flex gap-x-4">
-                <img src={icon} alt="no_icon" />
+                <img src={link.icon} alt="no_icon" />
                 <span>{link.title}</span>
               </div>
             </Link>
