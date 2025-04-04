@@ -50,7 +50,7 @@ function GenericTable<T extends object>({
                     <th
                       key={header.id}
                       onClick={header.column.getToggleSortingHandler()}
-                      className="px-4 py-2 cursor-pointer select-none text-gray-700"
+                      className="px-4 py-1 cursor-pointer select-none text-gray-700"
                     >
                       <div className="flex items-center gap-1">
                         {flexRender(
@@ -70,10 +70,10 @@ function GenericTable<T extends object>({
             {table.getRowModel().rows.map((row) => (
               <tr
                 key={row.id}
-                className="border-b last:border-b-0 hover:bg-gray-50"
+                className="border-b last:border-b-0"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-2 text-sm">
+                  <td key={cell.id} className="px-4 py-1 text-sm">
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
