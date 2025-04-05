@@ -5,6 +5,7 @@ import DashboardLayout from "@/modules/home/layout";
 import HomePage from "@/modules/home/screens/Dashboard";
 import Credits from "@/modules/credits";
 import Users from "@/modules/users";
+import Scooters from "@/modules/scooters"
 
 const Router: React.FC = () => {
   return (
@@ -14,6 +15,7 @@ const Router: React.FC = () => {
         <Route index element={<HomePage />} />
         <Route path="credits" element={<Credits />} />
         <Route path="users" element={<Users />} />
+        <Route path="scooters" element={<Scooters />} />
       </Route>
     </Routes>
   );
