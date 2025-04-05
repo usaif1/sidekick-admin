@@ -5,10 +5,10 @@ import Navbar from "@/components/Navbar";
 
 const DashboardLayout: React.FC = () => {
   return (
-    <div className="h-screen w-full flex flex-col bg-white">
-      <div className="h-full flex">
+    <div className="h-screen relative w-full flex flex-col bg-white">
+      <div className="h-full flex sticky top-0">
         <Sidebar />
-        <div className="w-full h-full pt-5 px-10">
+        <div className="w-full h-full pt-5 px-10 overflow-y-auto">
           <Navbar />
           <div className="mt-4">
             <Outlet />

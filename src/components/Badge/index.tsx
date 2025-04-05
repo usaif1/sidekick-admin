@@ -7,8 +7,8 @@ type Props = {
 
 const Badge: React.FC<Props> = ({ data, badgeTitle }) => {
   return (
-    <div className="flex justify-center px-2 py-1 text-sm gap-x-2 border border-black rounded-lg">
-      <p className="font-bold">{data}</p>
+    <div className="flex justify-center px-2 py-1 bg-tabs-primary text-sm gap-x-2 rounded-lg">
+      <p className="font-semibold">{data}</p>
       <p>{badgeTitle}</p>
     </div>
   );
