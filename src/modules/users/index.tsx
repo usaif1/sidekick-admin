@@ -12,14 +12,14 @@ const Users: React.FC = () => {
       {/* Quick Actions Section */}
       <div className="max-h-fit overflow-auto w-[469px] h-[89px] gap-5">
         <h2 className="font-semibold text-lg">Quick Actions</h2>
-        <div className="mt-3 flex gap-[12px]">
-          <button className="font-[Plus_Jakarta_Sans] w-[111px] h-[44px] gap-3 rounded-[90px] px-5 py-3 bg-[#18f27a]">
+        <div className="mt-3 flex gap-x-2">
+          <button className="font-bold text-sm rounded-full px-4 py-2 bg-[#18f27a]">
             Add User
           </button>
-          <button className="font-[Plus_Jakarta_Sans] w-[142px] h-[44px] gap-3 rounded-[90px] px-5 py-3 text-white bg-[#F84848]">
+          <button className="font-bold text-sm rounded-full px-4 py-2 text-white bg-[#F84848]">
             Remove User
           </button>
-          <button className="text-black font-[Plus_Jakarta_Sans] font-semibold text-[16px] leading-[100%] whitespace-nowrap overflow-hidden text-ellipsis h-[44px] gap-3 rounded-[90px] px-5 py-3 bg-white">
+          <button className="font-bold text-sm rounded-full px-4 py-2 bg-gray-200">
             View Block User
           </button>
         </div>
