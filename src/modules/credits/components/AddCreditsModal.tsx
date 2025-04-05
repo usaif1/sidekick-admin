@@ -30,6 +30,7 @@ const AddCreditsModal: React.FC = () => {
 
         {/* Selected Amount Display */}
         <WalletInput value={amount} onChange={() => {}} />
+          
         <div className="flex flex-col justify-between w-full">
           <div className="flex justify-between">
             <p className="text-icon-primary">Current Balance</p>
