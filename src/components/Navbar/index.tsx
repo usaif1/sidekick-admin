@@ -2,7 +2,7 @@ import React from "react";
 import { useLocation } from "react-router";
 import bell from "@/assets/bell.svg";
 import user from "@/assets/user.svg";
-import LiveBadges from "@/modules/home/screens/Dashboard/components/LiveBadges";
+import LiveBadges from "@/modules/home/components/LiveBadges";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
