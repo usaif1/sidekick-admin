@@ -151,6 +151,7 @@ const TransactionTable: React.FC = () => {
     <Table<TransactionData>
       data={transactionData}
       columns={transactionColumns}
+      pageSize={10}
     />
   );
 };

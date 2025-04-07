@@ -13,21 +13,23 @@ interface GenericTableProps<T extends object> {
   data: T[];
   columns: ColumnDef<T, any>[];
   title?: string;
-  // Additional props like className can be added if necessary
+  pageSize?: number; // New prop for setting number of rows per page
 }
 
 function GenericTable<T extends object>({
   data,
   columns,
   title,
+  pageSize = 5, // default value if not provided
 }: GenericTableProps<T>) {
   // Manage sorting state
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  // Initialize the table
+  // Initialize the table with initial pagination state using pageSize prop
   const table = useReactTable<T>({
     data,
     columns,
+    initialState: { pagination: { pageSize } },
     state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
@@ -68,13 +70,13 @@ function GenericTable<T extends object>({
           </thead>
           <tbody>
             {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="border-b last:border-b-0"
-              >
+              <tr key={row.id} className="border-b last:border-b-0">
                 {row.getVisibleCells().map((cell) => (
                   <td key={cell.id} className="px-4 py-1 text-sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext()
+                    )}
                   </td>
                 ))}
               </tr>
