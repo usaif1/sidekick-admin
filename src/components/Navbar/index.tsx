@@ -3,6 +3,8 @@ import { useLocation } from "react-router";
 import bell from "@/assets/bell.svg";
 import user from "@/assets/user.svg";
 import LiveBadges from "@/modules/home/components/LiveBadges";
+import ModalStore from "@/globalStore/modalStore";
+import userProfileModal from "./components/userProfile.tsx";
 
 const Navbar: React.FC = () => {
   const location = useLocation();
@@ -21,6 +23,8 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const { openModal } = ModalStore();
+
   return (
     <div className="flex w-full justify-between items-center">
       {location.pathname === "/" ? (
@@ -32,7 +36,9 @@ const Navbar: React.FC = () => {
         <div className="w-9 h-9 flex items-center bg-card-background justify-center rounded-full border-1 text-center border-border-primary">
           <img width={16} height={16} src={bell} alt="icon" />
         </div>
-        <div className="flex justify-center bg-card-background items-center px-4 py-1 gap-x-2 h-9 border border-border-primary rounded-full">
+        <div
+         onClick={() => openModal(userProfileModal)}
+         className="cursor-pointer flex justify-center bg-card-background items-center px-4 py-1 gap-x-2 h-9 border border-border-primary rounded-full">
           <img
             width={16}
             height={16}
