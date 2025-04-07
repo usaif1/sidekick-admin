@@ -4,7 +4,7 @@ import Table from "./userProfileTable.tsx";
 const UserProfile: React.FC = () => {
     return (
         // parent
-        <div className="p-4">
+        <div className="">
             <div className="w-full h-[95px] gap-[12px] pr-[20px] pl-[20px] flex justify-between mt-6  ">
                 <div className="flex flex-col gap-[8px]">
                     <div className="gap[12px] flex">
@@ -22,7 +22,7 @@ const UserProfile: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="gap-[80px]">
+                <div className=" flex items-center">
                     <button className="mr-[8px] bg-[#F84848] text-white w-[152px] h-[44px] rounded-[90px] gap-[12px] pt-[12px] pr-[20px] pb-[12px] pl-[20px]">
                         {" "}
                         Block User

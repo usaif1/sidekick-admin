@@ -21,7 +21,7 @@ const Credits: React.FC = () => {
       <div className="flex justify-end gap-x-2">
         <button
           onClick={() => openModal(AddCreditsModal)}
-          className="bg-btn-secondary px-4 py-1.5 text-sm font-medium rounded-full"
+          className=" bg-btn-secondary px-4 py-1.5 text-sm font-medium rounded-full"
         >
           Add Credits
         </button>
