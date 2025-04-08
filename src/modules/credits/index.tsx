@@ -39,7 +39,7 @@ const Credits: React.FC = () => {
       <CurrentBalanceCard walletData={walletData.wallets} />
       <div className="flex justify-end gap-x-2">
         <button
-          onClick={() => openModal(AddCreditsModal)}
+          onClick={() => openModal(() => <AddCreditsModal currentBalance={walletData.wallets[2].balance} walletId={walletData.wallets[2].id} />)}
           className="bg-btn-secondary px-4 py-1.5 text-sm font-medium rounded-full"
         >
           Add Credits

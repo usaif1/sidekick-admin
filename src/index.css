@@ -26,6 +26,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Hide spinner arrows in Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide spinner arrows in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
 body {
   margin: 0 !important;
 }

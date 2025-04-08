@@ -1,21 +1,21 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
-type TransactionData = {
+type UsersData = {
   s_no: number;
-  Name: string;
-  Employee_ID: number;
-  Total_minutes: number;
-  Last_Ride_Ended: string;
-  Credits_Spent: number;
-  Current_Balance: number;
+  name: string;
+  employee_id: string;
+  total_minutes: number;
+  last_ride_ended: string;
+  credits_spent: number;
+  current_balance: number;
 };
 
-const columnHelper = createColumnHelper<TransactionData>();
+const columnHelper = createColumnHelper<UsersData>();
 
 // Define columns for transaction data
-const transactionColumns: ColumnDef<TransactionData, any>[] = [
+const transactionColumns: ColumnDef<UsersData, any>[] = [
   columnHelper.accessor("s_no", {
     header: () => (
       <div className="flex items-center">
@@ -25,131 +25,68 @@ const transactionColumns: ColumnDef<TransactionData, any>[] = [
     ),
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("Name", {
+  columnHelper.accessor("name", {
     header: "Name",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("Employee_ID", {
+  columnHelper.accessor("employee_id", {
     header: "Employee ID",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("Total_minutes", {
+  columnHelper.accessor("total_minutes", {
     header: "Total Minutes",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("Last_Ride_Ended", {
+  columnHelper.accessor("last_ride_ended", {
     header: "Last Ride Ended",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("Credits_Spent", {
+  columnHelper.accessor("credits_spent", {
     header: "Credits Spent",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("Current_Balance", {
+  columnHelper.accessor("current_balance", {
     header: "Current Balance",
     cell: (info) => info.getValue(),
   }),
 ];
 
 // Generate sample transaction data
-const transactionData: TransactionData[] = [
-    {
-      s_no: 1,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 2,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 3,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 4,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 5,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 6,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 7,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 8,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 9,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-    {
-      s_no: 10,
-      Name: "2023-04-01",
-      Employee_ID: 100,
-      Total_minutes: 747,
-      Last_Ride_Ended: "12:34",
-      Credits_Spent: 600,
-      Current_Balance: 0,
-    },
-  ];
-  
+interface UserTableProps {
+  users: UsersData[];
+}
 
-const TransactionTable: React.FC = () => {
+const TransactionTable: React.FC<UserTableProps> = ({ users }) => {
+  const usersData = useMemo<UsersData[]>(() => {
+    if (!users) return [];
+
+    return users.map((item: any, index: number) => {
+      const user = item.user;
+      const rides = user?.rides || [];
+      const latestRideStep = rides[0]?.ride_steps?.[0]?.updated_at;
+
+      return {
+        s_no: index + 1,
+        name:
+          user.full_name ||
+          `${user.first_name ?? ""} ${user.middle_name ?? ""} ${
+            user.last_name ?? ""
+          }`.trim(),
+        employee_id: item.employee_id,
+        total_minutes: 0,
+        last_ride_ended: latestRideStep
+          ? new Date(latestRideStep).toLocaleString()
+          : "—",
+        credits_spent: 0,
+        current_balance: user.wallet?.balance ?? 0,
+      };
+    });
+  }, [users]);
+
+  console.log(users);
   return (
-    <Table<TransactionData>
-      data={transactionData}
+    <Table<UsersData>
+      data={usersData}
       columns={transactionColumns}
       pageSize={10}
     />
