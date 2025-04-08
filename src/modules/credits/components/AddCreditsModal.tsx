@@ -2,7 +2,7 @@ import WalletInput from "@/components/WalletInput";
 import React, { useState } from "react";
 
 const AddCreditsModal: React.FC = () => {
-  const [amount, setAmount] = useState(0); // Default selected amount
+  const [amount, setAmount] = useState<number>(); // Default selected amount
   const amounts = [1000, 2000, 3000]; // Available amounts
 
   return (
@@ -29,7 +29,7 @@ const AddCreditsModal: React.FC = () => {
         <p className="text-gray-400">or</p>
 
         {/* Selected Amount Display */}
-        <WalletInput value={amount} onChange={() => {}} />
+        <WalletInput value={amount as any} onChange={(e) => setAmount(e.target.value as any)} />
           
         <div className="flex flex-col justify-between w-full">
           <div className="flex justify-between">

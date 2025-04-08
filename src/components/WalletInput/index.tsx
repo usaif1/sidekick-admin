@@ -2,7 +2,7 @@ import React from "react";
 import wallet from "@/assets/credits.svg";
 
 type WalletInputProps = {
-  value: number | string;
+  value: number;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -20,7 +20,7 @@ const WalletInput: React.FC<WalletInputProps> = ({ value, onChange }) => {
         />
       </span>
       <input
-        type="number"
+        type="numeric"
         value={value}
         onChange={onChange}
         placeholder="XXXX"
