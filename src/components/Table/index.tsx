@@ -81,9 +81,9 @@ function GenericTable<T extends object>({
               </tr>
             ) : (
               rows.map((row) => (
-                <tr key={row.id} className="border-b last:border-b-0">
+                <tr key={row.id} className="border-b border-border-primary last:border-b-0">
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-1 text-sm">
+                    <td key={cell.id} className="px-4 py-1 text-sm cursor-pointer">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import Table from "./components/table.tsx";
+import ScootersMap from "../home/components/ScootersMap.tsx";
+import { useQuery } from "@apollo/client";
+import { FETCH_ALL_SCOOTERS } from "@/graphql/queries/fetchAllScooters.ts";
 
 const Scooters: React.FC = () => {
   const [activeTab, setActiveTab] = useState<
@@ -7,13 +10,24 @@ const Scooters: React.FC = () => {
   >("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+    const {
+      data: scootersData,
+      loading: scootersLoading,
+      error: scootersError,
+    } = useQuery(FETCH_ALL_SCOOTERS);
+
   const baseTabStyles =
     "px-4 py-0.5 rounded-lg transition-colors duration-200 cursor-pointer";
+
+    if (scootersLoading) return <p>Loading...</p>;
+    if (scootersError) return <p>Error loading!</p>;
 
   return (
     // parent container
     <div>
       {/* <div>Write code for the map part</div> */}
+
+      <ScootersMap />
 
       <div className="max-h-fit overflow-auto mt-7 mb-3">
         <h2 className="font-semibold text-lg">Active Users</h2>
@@ -97,14 +111,13 @@ const Scooters: React.FC = () => {
         </div>
       </div>
 
-      <Table />
+      <Table scooters={scootersData.scooters} />
 
       <div className="flex justify-between w-full mt-6">
         <div>"Click on Scooter to check its status."</div>
 
         <div>
           <button className=" text-[16px] leading-[100%] font-semibold tracking-[0] font-[Plus_Jakarta_Sans]  gap-3 rounded-[90px] px-5 py-3 bg-[#18f27a]">
-            {" "}
             Export
           </button>
         </div>

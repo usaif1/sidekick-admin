@@ -2,158 +2,77 @@ import React from "react";
 import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
-type TransactionData = {
+type ScootersData = {
   s_no: number;
-  scooter_ID: number;
-  batteryStatus: string;
-  lastRideEnded: string;
-  lastUsedBy: string;
-  lastCharge: number;
-  currentStatus: string;
+  scooter_id: string;
+  battery_status: string;
+  last_ride_ended: string;
+  last_used_by: string;
+  last_charge: number;
+  current_status: string;
 };
 
-const columnHelper = createColumnHelper<TransactionData>();
+const columnHelper = createColumnHelper<ScootersData>();
 
 // Define columns for transaction data
-const transactionColumns: ColumnDef<TransactionData, any>[] = [
+const scooterColumns: ColumnDef<ScootersData, any>[] = [
   columnHelper.accessor("s_no", {
     header: () => (
-      <div className="flex items-center">
+      <div className="">
         S.No.
         {/* Add sorting icons if needed */}
       </div>
     ),
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("scooter_ID", {
+  columnHelper.accessor("scooter_id", {
     header: "Scooter ID",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("batteryStatus", {
-    header: "Baterry Status",
+  columnHelper.accessor("battery_status", {
+    header: "Battery Status",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("lastRideEnded", {
+  columnHelper.accessor("last_ride_ended", {
     header: "Last Ride Ended",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("lastUsedBy", {
+  columnHelper.accessor("last_used_by", {
     header: "Last Used By",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("lastCharge", {
+  columnHelper.accessor("last_charge", {
     header: "Last Charge",
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("currentStatus", {
+  columnHelper.accessor("current_status", {
     header: "Current Status",
     cell: (info) => info.getValue(),
   }),
 ];
 
-// Generate sample transaction data
-const transactionData: TransactionData[] = [
-    {
-      s_no: 1,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 2,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 3,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 4,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 5,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 6,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 7,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 8,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 9,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-    {
-      s_no: 10,
-      scooter_ID: 35,
-      batteryStatus: "charged",
-      lastRideEnded: "today",
-      lastUsedBy: "12:34",
-      lastCharge: 600,
-      currentStatus: "NA",
-    },
-  ];
-  
+interface ScootersTableProps {
+  scooters: any[];
+}
 
-const TransactionTable: React.FC = () => {
+const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
+  console.log(scooters);
+  const scootersData: ScootersData[] = scooters?.map((scooter, index) => ({
+    s_no: index + 1,
+    scooter_id: scooter.id,
+    battery_status: scooter.battery_status ?? "XXXX",
+    last_ride_ended: scooter.rides[0]?.ride_steps[0]?.updated_at ?? "-",
+    last_used_by: scooter.rides[0]?.user?.full_name ?? "NA",
+    last_charge: scooter.last_charge ?? "-",
+    current_status: scooter.status
+  }))
   return (
-    <Table<TransactionData>
-      data={transactionData}
-      columns={transactionColumns}
+    <Table<ScootersData>
+      data={scootersData}
+      columns={scooterColumns}
       pageSize={10}
     />
   );
 };
 
-export default TransactionTable;
+export default ScooterTable;

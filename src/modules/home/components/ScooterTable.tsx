@@ -2,34 +2,40 @@ import React from "react";
 import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
-// Define your updated data type
+// Update the type to include rides with user details
 export type ScooterData = {
-  id: string;
+  battery: string;
   registration_number: string;
   is_active: boolean;
+  rides: {
+    user: {
+      full_name: string;
+    };
+  }[];
 };
 
 const columnHelper = createColumnHelper<ScooterData>();
 
-// Define columns for scooter data based on actual data fields
+// Define columns based on the updated type
 const scooterColumns: ColumnDef<ScooterData, any>[] = [
   columnHelper.accessor("registration_number", {
     header: () => (
-      <div className="flex items-center">
-        Scooter
-        {/* Add sorting icons if needed */}
-      </div>
+      <div className="flex items-center">Scooter</div>
     ),
     cell: (info) => info.getValue(),
   }),
-  columnHelper.accessor("is_active", {
-    header: "Active",
-    cell: (info) => (info.getValue() ? "Yes" : "No"),
+  // New column: display user full name from the first ride
+  columnHelper.accessor((row) => row.rides?.[0]?.user.full_name, {
+    id: "name", // a unique id for the accessor column
+    header: "Rider",
+    cell: (info) => info.getValue() || "NA",
   }),
-  // Optionally, you can display the id if needed:
-  columnHelper.accessor("id", {
-    header: "ID",
-    cell: (info) => info.getValue(),
+  // Optionally display the id column
+  columnHelper.accessor("battery", {
+    header: "Battery",
+    cell: () => <p>
+      XXXX
+    </p>,
   }),
 ];
 
