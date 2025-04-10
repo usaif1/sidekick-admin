@@ -5,6 +5,7 @@ import AddUsersModal from "./components/AddUsersModal.tsx";
 import BlockedUsersModal from "./components/BlockedUsersModal.tsx";
 import { useQuery } from "@apollo/client";
 import { FETCH_ORG_USERS } from "@/graphql/queries/fetchOrgUsers.ts";
+import RemoveUserModal from "./components/removeUserModal.tsx"
 
 const Users: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"This Month" | "Last Month">(
@@ -40,7 +41,9 @@ const Users: React.FC = () => {
           >
             Add User
           </button>
-          <button className="font-bold text-sm rounded-full px-4 py-2 text-white bg-[#F84848]">
+          <button 
+          onClick={() => openModal(RemoveUserModal)}
+          className="font-bold text-sm rounded-full px-4 py-2 text-white bg-[#F84848]">
             Remove User
           </button>
           <button
