@@ -10,6 +10,7 @@ function App() {
       <Router />
       <ReactModal
         isOpen={isModalOpen}
+        ariaHideApp={false}
         shouldCloseOnOverlayClick={false}
         style={{
           content: {
