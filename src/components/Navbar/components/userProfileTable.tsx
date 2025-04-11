@@ -2,7 +2,7 @@ import React from "react";
 import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
 
-type TransactionData = {
+type RidesAndTransactionData = {
   s_no: number;
   scooterID: string;
   duration: string;
@@ -11,10 +11,10 @@ type TransactionData = {
   
 };
 
-const columnHelper = createColumnHelper<TransactionData>();
+const columnHelper = createColumnHelper<RidesAndTransactionData>();
 
 // Define columns for transaction data
-const transactionColumns: ColumnDef<TransactionData, any>[] = [
+const ridesAndTransactionColumns: ColumnDef<RidesAndTransactionData, any>[] = [
   columnHelper.accessor("s_no", {
     header: () => (
       <div className="flex items-center">
@@ -45,7 +45,7 @@ const transactionColumns: ColumnDef<TransactionData, any>[] = [
 ];
 
 // Generate sample transaction data
-const transactionData: TransactionData[] = [
+const ridesAndTransactionData: RidesAndTransactionData[] = [
     {
       s_no: 1,
       scooterID: "XXXX",
@@ -121,9 +121,9 @@ const transactionData: TransactionData[] = [
 
 const TransactionTable: React.FC = () => {
   return (
-    <Table<TransactionData>
-      data={transactionData}
-      columns={transactionColumns}
+    <Table<RidesAndTransactionData>
+      data={ridesAndTransactionData}
+      columns={ridesAndTransactionColumns}
     />
   );
 };

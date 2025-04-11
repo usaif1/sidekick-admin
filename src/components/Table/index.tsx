@@ -14,6 +14,7 @@ interface GenericTableProps<T extends object> {
   columns: ColumnDef<T, any>[];
   title?: string;
   pageSize?: number;
+  onRowClick?: (rowData: T) => void;
 }
 
 function GenericTable<T extends object>({
@@ -21,6 +22,7 @@ function GenericTable<T extends object>({
   columns,
   title,
   pageSize = 5,
+  onRowClick,
 }: GenericTableProps<T>) {
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -81,9 +83,20 @@ function GenericTable<T extends object>({
               </tr>
             ) : (
               rows.map((row) => (
-                <tr key={row.id} className="border-b border-border-primary last:border-b-0">
+                <tr
+                  onClick={() => {
+                    if (onRowClick && row.original) {
+                      onRowClick(row.original);
+                    }
+                  }}
+                  key={row.id}
+                  className="border-b border-border-primary last:border-b-0"
+                >
                   {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="px-4 py-1 text-sm cursor-pointer">
+                    <td
+                      key={cell.id}
+                      className="px-4 py-1 text-sm cursor-pointer"
+                    >
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

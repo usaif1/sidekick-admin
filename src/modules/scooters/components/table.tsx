@@ -1,6 +1,10 @@
 import React from "react";
 import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import { useLazyQuery } from "@apollo/client";
+import { FETCH_RECENT_RIDES } from "@/graphql/queries/fetchRecentRides";
+import modalStore from "@/globalStore/modalStore";
+import ScooterDetailsModal from "./ScooterDetailsModal";
 
 type ScootersData = {
   s_no: number;
@@ -56,7 +60,7 @@ interface ScootersTableProps {
 }
 
 const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
-  console.log(scooters);
+  const { openModal } = modalStore();
   const scootersData: ScootersData[] = scooters?.map((scooter, index) => ({
     s_no: index + 1,
     scooter_id: scooter.id,
@@ -64,13 +68,30 @@ const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
     last_ride_ended: scooter.rides[0]?.ride_steps[0]?.updated_at ?? "-",
     last_used_by: scooter.rides[0]?.user?.full_name ?? "NA",
     last_charge: scooter.last_charge ?? "-",
-    current_status: scooter.status
-  }))
+    current_status: scooter.status,
+  }));
+
+  const [fetchRecentRides] = useLazyQuery(FETCH_RECENT_RIDES, {
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      openModal(() => <ScooterDetailsModal data={data} />);
+    },
+    onError: (err) => {
+      console.error("Error fetching user ride data:", err);
+    },
+  });
+
+  const handleRowClick = (rowData: ScootersData) => {
+    if (rowData.scooter_id) {
+      fetchRecentRides({ variables: { scooterId: rowData.scooter_id } });
+    }
+  };
   return (
     <Table<ScootersData>
       data={scootersData}
       columns={scooterColumns}
       pageSize={10}
+      onRowClick={handleRowClick}
     />
   );
 };

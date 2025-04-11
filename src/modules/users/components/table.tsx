@@ -1,6 +1,10 @@
 import React, { useMemo } from "react";
 import Table from "@/components/Table";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table";
+import modalStore from "@/globalStore/modalStore";
+import UserProfile from "./UserProfileModal";
+import { useLazyQuery } from "@apollo/client";
+import { FETCH_USER_RIDES_DATA } from "@/graphql/queries/fetchUserRidesData";
 
 type UsersData = {
   s_no: number;
@@ -10,6 +14,7 @@ type UsersData = {
   last_ride_ended: string;
   credits_spent: number;
   current_balance: number;
+  user_id: string;
 };
 
 const columnHelper = createColumnHelper<UsersData>();
@@ -57,6 +62,7 @@ interface UserTableProps {
 }
 
 const TransactionTable: React.FC<UserTableProps> = ({ users }) => {
+  const { openModal } = modalStore();
   const usersData = useMemo<UsersData[]>(() => {
     if (!users) return [];
 
@@ -79,16 +85,33 @@ const TransactionTable: React.FC<UserTableProps> = ({ users }) => {
           : "—",
         credits_spent: 0,
         current_balance: user.wallet?.balance ?? 0,
+        user_id: user.id,
       };
     });
   }, [users]);
 
-  console.log(users);
+  const [fetchUserRidesData] = useLazyQuery(FETCH_USER_RIDES_DATA, {
+    fetchPolicy: "network-only",
+    onCompleted: (data) => {
+      openModal(() => <UserProfile data={data} />);
+    },
+    onError: (err) => {
+      console.error("Error fetching user ride data:", err);
+    },
+  });
+
+  const handleRowClick = (rowData: UsersData) => {
+    if (rowData.user_id) {
+      fetchUserRidesData({ variables: { userId: rowData.user_id } });
+    }
+  };
+
   return (
     <Table<UsersData>
       data={usersData}
       columns={transactionColumns}
       pageSize={10}
+      onRowClick={handleRowClick}
     />
   );
 };

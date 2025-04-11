@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Table from "./ACtable";
 import { useLazyQuery, useMutation } from "@apollo/client";
-import { FETCH_USERS_BY_ORG_ID } from "@/graphql/queries/fetchUsersByOrgId";
 import { UPDATE_USER_BALANCE } from "@/graphql/mutations/updateUserBalance";
 import modalStore from "@/globalStore/modalStore";
+import { FETCH_ORG_USERS } from "@/graphql/queries/fetchOrgUsers";
 
 const AssignCreditsModal: React.FC = () => {
   const [amount, setAmount] = useState<number | "">("");
@@ -12,7 +12,7 @@ const AssignCreditsModal: React.FC = () => {
   const { closeModal } = modalStore();
 
   const [fetchUsersByOrgId, { data, loading, error }] = useLazyQuery(
-    FETCH_USERS_BY_ORG_ID,
+    FETCH_ORG_USERS,
     {
       fetchPolicy: "network-only",
     }
@@ -33,9 +33,9 @@ const AssignCreditsModal: React.FC = () => {
   }, [fetchUsersByOrgId]);
 
   // Prepare the users data for display in the table
-  const usersData = data?.users?.map((user: any) => ({
-    name: user.full_name,
-    user_id: user.id,
+  const usersData = data?.user_organizations?.map((orgUser: any) => ({
+    name: orgUser.user.full_name,
+    user_id: orgUser.user.id,
   }));
 
   const toggleSelection = (userId: string) => {
