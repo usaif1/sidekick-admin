@@ -3,6 +3,9 @@ import Table from "./components/table.tsx";
 import modalStore from "@/globalStore/modalStore.ts";
 import AddUsersModal from "./components/AddUsersModal.tsx";
 import BlockedUsersModal from "./components/BlockedUsersModal.tsx";
+import { useQuery } from "@apollo/client";
+import { FETCH_ORG_USERS } from "@/graphql/queries/fetchOrgUsers.ts";
+import RemoveUserModal from "./components/removeUserModal.tsx"
 
 const Users: React.FC = () => {
   const [activeTab, setActiveTab] = useState<"This Month" | "Last Month">(
@@ -12,8 +15,19 @@ const Users: React.FC = () => {
 
   const { openModal } = modalStore();
 
+  const {
+    data: usersData,
+    error: usersError,
+    loading: usersLoading,
+  } = useQuery(FETCH_ORG_USERS, {
+    fetchPolicy: "network-only",
+  });
+
   const baseTabStyles =
     "px-4 py-0.5 rounded-lg transition-colors duration-200 cursor-pointer";
+
+  if (usersLoading) return <p>Loading...</p>;
+  if (usersError) return <p>Error loading data!</p>;
 
   return (
     <div>
@@ -27,7 +41,9 @@ const Users: React.FC = () => {
           >
             Add User
           </button>
-          <button className="font-bold text-sm rounded-full px-4 py-2 text-white bg-[#F84848]">
+          <button 
+          onClick={() => openModal(RemoveUserModal)}
+          className="font-bold text-sm rounded-full px-4 py-2 text-white bg-[#F84848]">
             Remove User
           </button>
           <button
@@ -100,7 +116,17 @@ const Users: React.FC = () => {
         </div>
       </div>
 
-      <Table />
+      <Table users={usersData.user_organizations} />
+
+      <div className="flex justify-between items-center w-full mt-6">
+        <div>Click on User to view their profile.</div>
+
+        <div>
+          <button className="font-semibold rounded-full px-5 py-2 bg-[#18f27a]">
+            Export
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

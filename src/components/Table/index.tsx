@@ -13,27 +13,31 @@ interface GenericTableProps<T extends object> {
   data: T[];
   columns: ColumnDef<T, any>[];
   title?: string;
-  // Additional props like className can be added if necessary
+  pageSize?: number;
+  onRowClick?: (rowData: T) => void;
 }
 
 function GenericTable<T extends object>({
   data,
   columns,
   title,
+  pageSize = 5,
+  onRowClick,
 }: GenericTableProps<T>) {
-  // Manage sorting state
   const [sorting, setSorting] = useState<SortingState>([]);
 
-  // Initialize the table
   const table = useReactTable<T>({
     data,
     columns,
+    initialState: { pagination: { pageSize } },
     state: { sorting },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  const rows = table.getRowModel().rows;
 
   return (
     <div className="max-w-full rounded-xl mx-auto p-4 bg-card-background h-fit">
@@ -67,18 +71,41 @@ function GenericTable<T extends object>({
             ))}
           </thead>
           <tbody>
-            {table.getRowModel().rows.map((row) => (
-              <tr
-                key={row.id}
-                className="border-b last:border-b-0"
-              >
-                {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} className="px-4 py-1 text-sm">
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                ))}
+            {rows.length === 0 ? (
+              <tr>
+                <td
+                  colSpan={columns.length}
+                  className="text-center py-10 font-bold text-gray-500"
+                  style={{ height: "30vh" }}
+                >
+                  No data found!!
+                </td>
               </tr>
-            ))}
+            ) : (
+              rows.map((row) => (
+                <tr
+                  onClick={() => {
+                    if (onRowClick && row.original) {
+                      onRowClick(row.original);
+                    }
+                  }}
+                  key={row.id}
+                  className="border-b border-border-primary last:border-b-0"
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <td
+                      key={cell.id}
+                      className="px-4 py-1 text-sm cursor-pointer"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

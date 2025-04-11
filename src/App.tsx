@@ -1,16 +1,28 @@
+import { useCallback } from "react";
 import ModalStore from "./globalStore/modalStore";
 import Router from "./routes/Router";
 import ReactModal from "react-modal";
 
 function App() {
-  const { ModalComponent, ModalCloseButton, isModalOpen } = ModalStore();
+  const { ModalComponent, ModalCloseButton, isModalOpen, clearModalCallback, modalTransitionCallback } = ModalStore();
+
+  const onAfterClose = useCallback(() => {
+    if (modalTransitionCallback) {
+      // Open the next modal component
+      modalTransitionCallback();
+      // Clear the callback so it doesn't run again on every close
+      clearModalCallback();
+    }
+  }, [modalTransitionCallback, clearModalCallback]);
 
   return (
     <>
       <Router />
       <ReactModal
         isOpen={isModalOpen}
+        ariaHideApp={false}
         shouldCloseOnOverlayClick={false}
+        onAfterClose={onAfterClose}
         style={{
           content: {
             maxHeight: "80vh",

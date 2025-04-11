@@ -13,15 +13,9 @@ type RideData = {
 
 const columnHelper = createColumnHelper<RideData>();
 
-// Define columns for ride data
 const rideColumns: ColumnDef<RideData, any>[] = [
   columnHelper.accessor("s_no", {
-    header: () => (
-      <div className="flex items-center">
-        S.No.
-        {/* Sorting icon can be added here */}
-      </div>
-    ),
+    header: () => <div className="flex items-center">S.No.</div>,
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("scooter", {
@@ -42,45 +36,19 @@ const rideColumns: ColumnDef<RideData, any>[] = [
   }),
 ];
 
-const rideData: RideData[] = [
-  {
-    s_no: 1,
-    scooter: "Scooter A",
-    duration: "15 mins",
-    user: "John Doe",
-    status: "Active",
-  },
-  {
-    s_no: 2,
-    scooter: "Scooter B",
-    duration: "20 mins",
-    user: "Jane Smith",
-    status: "Completed",
-  },
-  {
-    s_no: 3,
-    scooter: "Scooter C",
-    duration: "10 mins",
-    user: "Alice Johnson",
-    status: "Active",
-  },
-  {
-    s_no: 4,
-    scooter: "Scooter D",
-    duration: "25 mins",
-    user: "Bob Brown",
-    status: "Cancelled",
-  },
-  {
-    s_no: 5,
-    scooter: "Scooter E",
-    duration: "30 mins",
-    user: "Charlie White",
-    status: "Active",
-  },
-];
+interface RideTableProps {
+  rides: any[]; // ideally type this better based on your schema
+}
 
-const RideTable: React.FC = () => {
+const RideTable: React.FC<RideTableProps> = ({ rides }) => {
+  const rideData: RideData[] = rides.map((ride, index) => ({
+    s_no: index + 1,
+    scooter: ride.scooter?.registration_number ?? "N/A",
+    duration: getDuration(ride.start_time, ride.end_time),
+    user: ride.user?.full_name ?? "N/A",
+    status: ride.scooter?.status ?? "Unknown",
+  }));
+
   return (
     <Table<RideData>
       data={rideData}
@@ -89,5 +57,19 @@ const RideTable: React.FC = () => {
     />
   );
 };
+
+// Helper to calculate duration
+function getDuration(start: string, end: string): string {
+  if (!start || !end) return "N/A";
+
+  const startTime = new Date(start);
+  const endTime = new Date(end);
+  const durationMs = endTime.getTime() - startTime.getTime();
+
+  if (isNaN(durationMs)) return "N/A";
+
+  const minutes = Math.floor(durationMs / 1000 / 60);
+  return `${minutes} mins`;
+}
 
 export default RideTable;
