@@ -53,19 +53,19 @@ const RemoveUserModal: React.FC = () => {
   };
 
   return (
-    <div className="text-center items-center flex flex-col left-[5833px] rounded-[12px] gap-6 mt-4">
-      <div className="w-[672px] h-[49px] gap-1 flex flex-col items-centre">
-        <h1 className="w-[672px] h-[25px] font-jakarta font-bold text-[20px] leading-[100%] tracking-[0%] text-center text-xl">
+    <div className="text-center items-center flex flex-col rounded-xl gap-6 mt-4">
+      <div className=" gap-1 flex flex-col items-centre">
+        <h1 className=" font-jakarta font-bold  leading-[100%] tracking-[0%] text-center text-xl">
           Remove Users
         </h1>
-        <p className="w-[672px] h-[20px] font-jakarta font-normal text-[16px] leading-[100%] tracking-[0%] text-center text-[#86A0CA] text-sm ">
+        <p className="font-jakarta font-normal text-base leading-[100%] tracking-[0%] text-center text-[#86A0CA] ">
           Please select the users that are to be removed.
         </p>
       </div>
 
       {/* Search and Select All */}
       <div className="w-full gap-x-2 flex items-center">
-        <div className="w-[585px] h-[36px] rounded-[12px] border border-solid gap-3 p-2 flex items-center border-[#296AEB] px-[8px] ">
+        <div className=" w-full rounded-xl border border-solid gap-3 p-2 flex items-center border-[#296AEB] px-2 ">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-4 h-4 text-blue-500"
@@ -83,17 +83,17 @@ const RemoveUserModal: React.FC = () => {
           <input
             type="text"
             placeholder="Search Users"
-            className="w-full h-full outline-none bg-transparent text-black placeholder:text-gray-400"
+            className="w-full  outline-none bg-transparent text-black placeholder:text-gray-400"
           />
         </div>
 
-        <button className="rounded-lg text-sm px-4 py-2 bg-[#296AEB] font-bold text-white">
+        <button className="rounded-lg text-sm px-4 py-1 bg-[#296AEB] font-bold text-white">
           Select All
         </button>
       </div>
 
       {/* Table area */}
-      <div className="w-[672px] h-full rounded-[12px] gap-5">
+      <div className="w-full h-full rounded-xl gap-5">
         {!loading && !error && usersData && (
           <Table
             selectedUserIds={selectedUserIds}
@@ -104,7 +104,7 @@ const RemoveUserModal: React.FC = () => {
       </div>
 
       {/* Remove Button */}
-      <div className="w-[672px] h-[44px] gap-[10px] flex justify-center">
+      <div className=" gap-2.5 flex justify-center">
         <button
           disabled={removing || selectedUserIds.length === 0}
           onClick={handleRemove}

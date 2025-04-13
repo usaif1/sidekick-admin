@@ -32,7 +32,7 @@ const Users: React.FC = () => {
   return (
     <div>
       {/* Quick Actions Section */}
-      <div className="max-h-fit overflow-auto w-[469px] h-[89px] gap-5">
+      <div className="max-h-fit overflow-auto gap-5">
         <h2 className="font-semibold text-lg">Quick Actions</h2>
         <div className="mt-3 flex gap-x-2">
           <button
@@ -85,13 +85,13 @@ const Users: React.FC = () => {
           </div>
 
           {/* Search Field */}
-          <div className="relative w-[240px] h-[36px]">
+          <div className="relative ">
             <input
               type="text"
               placeholder="Search Scooter or User"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-full rounded-[12px] border border-[#296AEB] pl-10 pr-4 text-black
+              className="w-full h-full rounded-xl border border-[#296AEB] pl-10 pr-4 text-black
                        placeholder:text-gray-400 focus:outline-none 
                        transition-all duration-200"
             />
