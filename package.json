@@ -12,6 +12,7 @@
   "dependencies": {
     "@apollo/client": "^3.13.5",
     "@phosphor-icons/react": "^2.1.7",
+    "@react-google-maps/api": "^2.20.6",
     "@tailwindcss/vite": "^4.0.17",
     "@tanstack/react-table": "^8.21.2",
     "graphql": "^16.10.0",
