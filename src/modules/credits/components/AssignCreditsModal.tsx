@@ -58,7 +58,7 @@ const AssignCreditsModal: React.FC = () => {
   };
 
   return (
-    <div className="w-full overflow-hidden flex flex-col items-center text-center h-full">
+    <div className="w-full h-full flex flex-col items-center overflow-auto text-center">
       {/* Header Section */}
       <div className="w-full">
         <h1 className="font-semibold text-xl">Assign Credit</h1>
@@ -66,8 +66,8 @@ const AssignCreditsModal: React.FC = () => {
       </div>
 
       {/* Amount Input Section */}
-      <div className="gap-[8px] mb-4">
-        <div className="flex items-center w-[672px] h-[60px] rounded-[12px] border border-[#296AEB] gap-[20px] px-[20px] py-[10px] my-[12px]">
+      <div className="gap-2 mb-4 w-full">
+        <div className="flex items-center rounded-xl border border-[#296AEB] gap-5 px-5 py-[10px] my-3">
           {/* Wallet Icon */}
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -103,19 +103,19 @@ const AssignCreditsModal: React.FC = () => {
         <div className="flex flex-row-reverse gap-x-3">
           <button
             onClick={() => setAmount(500)}
-            className="font-semibold w-[100px] h-[36px] rounded-[12px] px-[12px] py-[8px] bg-[#72FFB1] text-black"
+            className="font-semibold  rounded-[12px] px-[12px] py-[8px] bg-[#72FFB1] text-black"
           >
             +500
           </button>
           <button
             onClick={() => setAmount(200)}
-            className="font-semibold w-[100px] h-[36px] rounded-[12px] px-[12px] py-[8px] bg-[#72FFB1] text-black"
+            className="font-semibold  rounded-[12px] px-[12px] py-[8px] bg-[#72FFB1] text-black"
           >
             +200
           </button>
           <button
             onClick={() => setAmount(100)}
-            className="font-semibold w-[100px] h-[36px] rounded-[12px] px-[12px] py-[8px] bg-[#72FFB1] text-black"
+            className="font-semibold rounded-[12px] px-[12px] py-[8px] bg-[#72FFB1] text-black"
           >
             +100
           </button>
@@ -123,9 +123,9 @@ const AssignCreditsModal: React.FC = () => {
       </div>
 
       {/* Search Input & Select All Button */}
-      <div className="flex items-center gap-[12px] mb-5">
+      <div className="flex items-center justify-center gap-3 mb-5 w-full">
         {/* Search Input */}
-        <div className="flex items-center w-[585px] h-[36px] rounded-[12px] border border-[#296AEB] px-[8px] gap-[8px]">
+        <div className="h-full w-full flex items-center rounded-xl border border-[#296AEB] px-2 gap-2 py-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-4 h-4 text-blue-500"
@@ -143,11 +143,11 @@ const AssignCreditsModal: React.FC = () => {
           <input
             type="text"
             placeholder="Search Scooter or User"
-            className="w-full h-full outline-none bg-transparent text-black placeholder:text-gray-400"
+            className=" h-full outline-none bg-transparent text-black placeholder:text-gray-400"
           />
         </div>
         {/* Select All Button */}
-        <button className="h-[36px] font-bold text-[12px] bg-blue-600 text-white px-4 py-1.5 rounded-lg">
+        <button className=" font-bold text-xs bg-blue-600 text-white px-4 py-1 rounded-lg  ">
           Select All
         </button>
       </div>
@@ -174,18 +174,18 @@ const AssignCreditsModal: React.FC = () => {
 
       {/* Footer Section */}
       <div className="flex justify-between w-full mt-6">
-        <div className="flex flex-col gap-[8px]">
+        <div className="flex flex-col gap-2">
           <div className="flex gap-x-2">
-            <p className="text-[#296AEB] font-bold text-[14px]">Assignees</p>
-            <p className="font-normal text-[14px] text-right">
+            <p className="text-[#296AEB] font-bold text-xs">Assignees</p>
+            <p className="font-normal text-xs text-right">
               {selectedUserIds.length ? selectedUserIds.length : "XXXX"}
             </p>
           </div>
           <div className="flex gap-x-2">
-            <p className="text-[#296AEB] font-bold text-[14px]">
+            <p className="text-[#296AEB] font-bold text-xs">
               Total credits
             </p>
-            <p className="font-normal text-[14px] text-right">
+            <p className="font-normal text-xs text-right">
               {amount ? amount : "XXXX"}
             </p>
           </div>
@@ -193,7 +193,7 @@ const AssignCreditsModal: React.FC = () => {
         <div>
           <button
             onClick={handleProceed}
-            className="text-[16px] font-semibold rounded-[90px] px-5 py-3 bg-[#18f27a]"
+            className="text-base font-semibold rounded-[90px] px-5 py-3 bg-[#18f27a]"
           >
             Proceed
           </button>

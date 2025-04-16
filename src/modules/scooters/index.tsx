@@ -80,13 +80,13 @@ const Scooters: React.FC = () => {
           </div>
 
           {/* Search Field */}
-          <div className="relative w-[240px] h-[36px]">
+          <div className="relative ">
             <input
               type="text"
               placeholder="Search Scooter or User"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-full rounded-[12px] border border-[#296AEB] pl-10 pr-4 text-black
+              className="w-full h-full rounded-xl border border-[#296AEB] pl-10 pr-4 text-black
                        placeholder:text-gray-400 focus:outline-none 
                        transition-all duration-200"
             />
@@ -117,7 +117,7 @@ const Scooters: React.FC = () => {
         <div>"Click on Scooter to check its status."</div>
 
         <div>
-          <button className=" text-[16px] leading-[100%] font-semibold tracking-[0] font-[Plus_Jakarta_Sans]  gap-3 rounded-[90px] px-5 py-3 bg-[#18f27a]">
+          <button className=" text-base leading-[100%] font-semibold tracking-[0] font-[Plus_Jakarta_Sans]  gap-3 rounded-[90px] px-5 py-3 bg-[#18f27a]">
             Export
           </button>
         </div>
