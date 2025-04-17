@@ -15,6 +15,7 @@
     "@react-google-maps/api": "^2.20.6",
     "@tailwindcss/vite": "^4.0.17",
     "@tanstack/react-table": "^8.21.2",
+    "firebase": "^11.6.0",
     "graphql": "^16.10.0",
     "papaparse": "^5.5.2",
     "react": "^19.0.0",

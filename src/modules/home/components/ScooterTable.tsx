@@ -25,7 +25,7 @@ const scooterColumns: ColumnDef<ScooterData, any>[] = [
     cell: (info) => info.getValue(),
   }),
   // New column: display user full name from the first ride
-  columnHelper.accessor((row) => row.rides?.[0]?.user.full_name, {
+  columnHelper.accessor((row) => row.rides?.[0]?.user?.full_name, {
     id: "name", // a unique id for the accessor column
     header: "Rider",
     cell: (info) => info.getValue() || "NA",

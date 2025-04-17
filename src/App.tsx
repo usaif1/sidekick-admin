@@ -1,10 +1,21 @@
 import { useCallback } from "react";
 import ModalStore from "./globalStore/modalStore";
-import Router from "./routes/Router";
 import ReactModal from "react-modal";
+import { BrowserRouter } from "react-router";
+import ProtectedRoutes from "./routes/ProtectedRoutes";
+import UnProtectedRoutes from "./routes/UnprotectedRoutes";
+import { useAuth } from "./modules/auth/AuthContext";
 
 function App() {
-  const { ModalComponent, ModalCloseButton, isModalOpen, clearModalCallback, modalTransitionCallback } = ModalStore();
+  const { isAuthenticated } = useAuth();
+
+  const {
+    ModalComponent,
+    ModalCloseButton,
+    isModalOpen,
+    clearModalCallback,
+    modalTransitionCallback,
+  } = ModalStore();
 
   const onAfterClose = useCallback(() => {
     if (modalTransitionCallback) {
@@ -17,7 +28,9 @@ function App() {
 
   return (
     <>
-      <Router />
+      <BrowserRouter>
+        {isAuthenticated ? <ProtectedRoutes /> : <UnProtectedRoutes />}
+      </BrowserRouter>
       <ReactModal
         isOpen={isModalOpen}
         ariaHideApp={false}

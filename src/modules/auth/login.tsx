@@ -1,18 +1,27 @@
-import { useState } from 'react';
-import sidekick from "@/assets/sidekick-logo.png"
-import { useNavigate } from 'react-router';
+import { useState } from "react";
+import sidekick from "@/assets/sidekick-logo.png";
+import { useNavigate } from "react-router";
+import { signin } from "./service/auth.service";
+import { useAuth } from "./AuthContext";
 
-const SplitLoginCard = () => {
+const Auth = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
   const [credentials, setCredentials] = useState({
-    loginId: '',
-    password: ''
+    loginId: "",
+    password: "",
   });
 
-  const handleSubmit = (e: any) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login attempted with:', credentials);
-    navigate('/');
+    try {
+      const { token } = await signin(credentials.loginId, credentials.password);
+      login(token);
+      navigate("/");
+    } catch (err) {
+      console.error(err);
+      console.log(err);
+    }
   };
 
   return (
@@ -28,19 +37,23 @@ const SplitLoginCard = () => {
         {/* Lower Half (Form) */}
         <div className="absolute bottom-0 w-full h-1/2 bg-white p-8 rounded-t-2xl ">
           <div className="flex flex-col justify-center h-full ">
-           <div className=" text-center w-[552px] h-[85px] gap-3 mb-8
-">
-           <h2 className=" font-[Plus_Jakarta_Sans] font-bold text-[34px] leading-none tracking-[0">
-              Welcome!
-            </h2>
+            <div
+              className=" text-center w-[552px] h-[85px] gap-3 mb-8
+"
+            >
+              <h2 className=" font-[Plus_Jakarta_Sans] font-bold text-[34px] leading-none tracking-[0">
+                Welcome!
+              </h2>
 
-            <p className="font-[Plus_Jakarta_Sans] font-normal text-[24px] leading-none tracking-[0]">Please sign in to continue to the portal.</p>
-           </div>
-            
-            <form onSubmit={handleSubmit} className="space-y-6  mb-22 ">
+              <p className="font-[Plus_Jakarta_Sans] font-normal text-[24px] leading-none tracking-[0]">
+                Please sign in to continue to the portal.
+              </p>
+            </div>
+
+            <form onSubmit={handleLogin} className="space-y-6  mb-22 ">
               <div className="gap-8">
-                <label 
-                  htmlFor="loginId" 
+                <label
+                  htmlFor="loginId"
                   className=" w-[552px] h-[18px] gap-5 pr-5 pl-5 block text-gray-600 mb-2 text-sm"
                 >
                   Email ID
@@ -52,13 +65,15 @@ const SplitLoginCard = () => {
 "
                   placeholder="XXXX"
                   value={credentials.loginId}
-                  onChange={(e) => setCredentials({...credentials, loginId: e.target.value})}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, loginId: e.target.value })
+                  }
                 />
               </div>
 
               <div>
-                <label 
-                  htmlFor="password" 
+                <label
+                  htmlFor="password"
                   className="w-[552px] h-[18px] gap-5 pr-5 pl-5 block text-gray-600 mb-2 text-sm"
                 >
                   Password
@@ -69,7 +84,9 @@ const SplitLoginCard = () => {
                   className="w-full px-4 py-3 border  rounded-lg border-[#296AEB]  focus:ring-[#296AEB] focus:border-[#296AEB]"
                   placeholder="XXXX"
                   value={credentials.password}
-                  onChange={(e) => setCredentials({...credentials, password: e.target.value})}
+                  onChange={(e) =>
+                    setCredentials({ ...credentials, password: e.target.value })
+                  }
                 />
               </div>
 
@@ -89,4 +106,4 @@ const SplitLoginCard = () => {
   );
 };
 
-export default SplitLoginCard;
+export default Auth;
