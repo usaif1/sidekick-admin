@@ -2,7 +2,7 @@ import React from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 
 type Props = {
-  markers: { lat: number; lng: number }[];
+  markers?: { lat: number; lng: number }[];
 };
 
 const containerStyle = {
