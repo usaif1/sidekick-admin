@@ -11,6 +11,7 @@ import UserAddedModal from "./UserAddedModal";
 const AddUsersModal: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [phoneNo, setPhoneNo] = useState<string>("");
   const { closeModal, setModalTransitionCallback, openModal } = modalStore();
 
   const [createNewUser, { loading: userLoading, error: userError }] =
@@ -30,6 +31,7 @@ const AddUsersModal: React.FC = () => {
         const transformedData = parsedData.map((row: any) => ({
           full_name: row.Name,
           email: row.Email,
+          phone_number: row["Phone Number"],
           firebase_id: generateMockFirebaseId(),
         }));
 
@@ -56,9 +58,12 @@ const AddUsersModal: React.FC = () => {
           },
         });
 
-        const org_users = insertedOrgUsers.data?.insert_user_organizations?.returning;
+        const org_users =
+          insertedOrgUsers.data?.insert_user_organizations?.returning;
 
-        setModalTransitionCallback(() => openModal(() => <UserAddedModal data={org_users} />));
+        setModalTransitionCallback(() =>
+          openModal(() => <UserAddedModal data={org_users} />)
+        );
         closeModal();
       } catch (error) {
         console.error("Error while processing CSV upload:", error);
@@ -81,6 +86,7 @@ const AddUsersModal: React.FC = () => {
             {
               full_name: name,
               email: email,
+              phone_number: `+91${phoneNo}`,
               firebase_id: generateMockFirebaseId(),
             },
           ],
@@ -103,6 +109,7 @@ const AddUsersModal: React.FC = () => {
 
       setName("");
       setEmail("");
+      setPhoneNo("");
       closeModal();
     } catch (err) {
       console.error("Error creating user or assigning org:", err);
@@ -116,24 +123,39 @@ const AddUsersModal: React.FC = () => {
         Please Enter the New User's Details
       </p>
 
-      <div className="flex gap-x-2 mt-4">
+      <div className="flex flex-col gap-y-2 mt-4">
         <LabelInput
           id="name"
           type="text"
           placeholder="Full Name"
           label="Enter Name"
-          className="w-72"
+          className="w-96"
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <LabelInput
           id="email"
           type="text"
-          className="w-72"
+          className="w-96"
           placeholder="Example@example.com"
           label="Enter Email Address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+        />
+        <LabelInput
+          id="phone"
+          type="text"
+          className="w-96"
+          placeholder="XXXX XX XXXX"
+          label="Phone Number"
+          value={phoneNo}
+          onChange={(e) => {
+            const value = e.target.value;
+            // Only allow digits (0-9)
+            if (/^\d*$/.test(value)) {
+              setPhoneNo(value);
+            }
+          }}
         />
       </div>
 
