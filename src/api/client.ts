@@ -7,14 +7,29 @@ import {
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged, User } from "firebase/auth";
+
+function waitForFirebaseAuth(): Promise<User | null> {
+  const auth = getAuth();
+
+  return new Promise((resolve) => {
+    if (auth.currentUser) {
+      resolve(auth.currentUser);
+    } else {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user);
+      });
+    }
+  });
+}
 
 const httpLink = createHttpLink({
   uri: import.meta.env.VITE_HASURA_ENDPOINT,
 });
 
 const authLink = setContext(async (_, { headers }) => {
-  const user = getAuth().currentUser;
+  const user = await waitForFirebaseAuth();
   if (!user) return { headers };
   const token = await user.getIdToken(false);
   return {
