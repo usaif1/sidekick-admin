@@ -1,20 +1,24 @@
 import { gql } from "@apollo/client";
 
-export const FETCH_RIDES = gql(`
+export const FETCH_RIDES = gql`
   query fetchRides {
-    ride_details {
-      scooter {
-        registration_number
-        status
-      }
-      start_time
-      end_time
-      user {
-        full_name
-        first_name
-        middle_name
-        last_name
+    ride_detailsCollection(first: 50) {
+      edges {
+        node {
+          start_time
+          end_time
+          scooters {
+            registration_number
+            status
+          }
+          users {
+            full_name
+            first_name
+            middle_name
+            last_name
+          }
+        }
       }
     }
   }
-`);
+`;
