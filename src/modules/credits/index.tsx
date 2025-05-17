@@ -40,10 +40,10 @@ const Credits: React.FC = () => {
 
   return (
     <div className="flex flex-col gap-y-4">
-      <CurrentBalanceCard walletData={walletData.wallets} />
+      <CurrentBalanceCard walletData={walletData.walletsCollection.edges[0].node} />
       <div className="flex justify-end gap-x-2">
         <button
-          onClick={() => openModal(() => <AddCreditsModal currentBalance={walletData.wallets[0].balance} walletId={walletData.wallets[0].id} />)}
+          onClick={() => openModal(() => <AddCreditsModal currentBalance={walletData.walletsCollection.edges[0].node.balance} walletId={walletData.walletsCollection.edges[0].node.id} />)}
           className="bg-btn-secondary px-4 py-1.5 text-sm font-medium rounded-full"
         >
           Add Credits
@@ -83,7 +83,7 @@ const Credits: React.FC = () => {
         </div>
         <div className="w-full mt-2">
           {/* Pass the transactions to your TransactionTable component */}
-          <TransactionTable transactions={transactionData.wallet_transactions} />
+          <TransactionTable transactions={transactionData.wallet_transactionsCollection} />
         </div>
         <div className="flex w-full justify-end mt-2">
           <button className="bg-btn-primary px-4 py-1.5 text-sm font-medium rounded-full">

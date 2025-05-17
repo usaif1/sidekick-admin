@@ -111,7 +111,7 @@ const Scooters: React.FC = () => {
         </div>
       </div>
 
-      <Table scooters={scootersData.scooters} />
+      <Table scooters={scootersData.scootersCollection.edges} />
 
       <div className="flex justify-between w-full mt-6">
         <div>"Click on Scooter to check its status."</div>

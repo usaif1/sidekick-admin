@@ -1,13 +1,13 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_USER_ORG = gql`
-  mutation createUserOrg($objects: [user_organizations_insert_input!] = []) {
-    insert_user_organizations(objects: $objects) {
-      affected_rows
-      returning {
+  mutation createUserOrg($objects: [user_organizationsInsertInput!]!) {
+    insertIntouser_organizationsCollection(objects: $objects) {
+      affectedCount
+      records {
         id
         user_id
-        user {
+        users {
           full_name
         }
       }
