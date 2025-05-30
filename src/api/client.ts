@@ -29,14 +29,12 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext(async (_, { headers }) => {
-  const anonKey = import.meta.env.VITE_PUBLIC_SUPABASE_ANON_KEY;
   const user = await waitForFirebaseAuth();
   if (!user) return { headers };
   const token = await user.getIdToken(false);
   return {
     headers: {
       ...headers,
-      apiKey: anonKey,
       authorization: token ? `Bearer ${token}` : "",
     },
   };
