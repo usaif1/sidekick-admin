@@ -2,17 +2,29 @@ import { gql } from "@apollo/client";
 
 export const FETCH_ACTIVE_SCOOTERS = gql`
   query fetchActiveScooters {
-    scooters(where: { is_active: { _eq: true } }) {
-      registration_number
-      is_active
-      id
-      rides {
-        user {
-          full_name
+    scootersCollection(first: 50, filter: { is_active: { eq: true } }) {
+      edges {
+        node {
+          registration_number
+          is_active
+          id
+          latitude
+          longitude
+          ride_detailsCollection {
+            edges {
+              node {
+                users {
+                  full_name
+                }
+              }
+            }
+          }
         }
       }
-      latitude
-      longitude
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
     }
   }
 `;
