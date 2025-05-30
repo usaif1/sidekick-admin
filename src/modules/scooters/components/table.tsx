@@ -65,8 +65,8 @@ const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
     s_no: index + 1,
     scooter_id: scooter.id,
     battery_status: scooter.battery_status ?? "XXXX",
-    last_ride_ended: scooter.rides[0]?.ride_steps[0]?.updated_at ?? "-",
-    last_used_by: scooter.rides[0]?.user?.full_name ?? "NA",
+    last_ride_ended: scooter.ride_details[0]?.ride_steps[0]?.updated_at ?? "-",
+    last_used_by: scooter.ride_details[0]?.user?.full_name ?? "NA",
     last_charge: scooter.last_charge ?? "-",
     current_status: scooter.status,
   }));

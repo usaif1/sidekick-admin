@@ -6,13 +6,13 @@ export const FETCH_ACTIVE_SCOOTERS = gql`
       registration_number
       is_active
       id
-      rides {
+      latitude
+      longitude
+      ride_details {
         user {
           full_name
         }
       }
-      latitude
-      longitude
     }
   }
 `;

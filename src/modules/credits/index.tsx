@@ -19,7 +19,7 @@ const Credits: React.FC = () => {
     loading: walletLoading,
   } = useQuery(FETCH_WALLET_BALANCE, {
     variables: {
-      _eq: "bbf0dda2-1c0b-4193-9ca0-0f4b45a8f8d0"
+      _eq: "15fbefc7-aaa4-4335-ae7d-09bdc8fe3c7b"
     }
   });
 
@@ -43,7 +43,7 @@ const Credits: React.FC = () => {
       <CurrentBalanceCard walletData={walletData.wallets} />
       <div className="flex justify-end gap-x-2">
         <button
-          onClick={() => openModal(() => <AddCreditsModal currentBalance={walletData.wallets[0].balance} walletId={walletData.wallets[0].id} />)}
+          onClick={() => openModal(() => <AddCreditsModal currentBalance={walletData.wallets[0]?.balance} walletId={walletData.wallets[0]?.id} />)}
           className="bg-btn-secondary px-4 py-1.5 text-sm font-medium rounded-full"
         >
           Add Credits

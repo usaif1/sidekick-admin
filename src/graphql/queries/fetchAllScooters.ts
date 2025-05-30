@@ -6,7 +6,7 @@ export const FETCH_ALL_SCOOTERS = gql(`
       registration_number
       is_active
       id
-      rides(order_by: {updated_at: desc}, limit: 1) {
+      ride_details(order_by: {updated_at: desc}, limit: 1) {
         user {
           full_name
         }

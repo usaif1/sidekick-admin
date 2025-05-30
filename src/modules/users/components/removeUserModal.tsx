@@ -53,8 +53,8 @@ const RemoveUserModal: React.FC = () => {
   };
 
   return (
-    <div className="text-center items-center flex flex-col rounded-xl gap-6 mt-4">
-      <div className=" gap-1 flex flex-col items-centre">
+    <div className="text-center flex flex-col items-center rounded-xl gap-6 mt-4">
+      <div className="gap-1 flex flex-col items-centre">
         <h1 className=" font-jakarta font-bold  leading-[100%] tracking-[0%] text-center text-xl">
           Remove Users
         </h1>
@@ -93,7 +93,7 @@ const RemoveUserModal: React.FC = () => {
       </div>
 
       {/* Table area */}
-      <div className="w-full h-full rounded-xl gap-5">
+      <div className="w-full min-w-xl h-full rounded-xl gap-5">
         {!loading && !error && usersData && (
           <Table
             selectedUserIds={selectedUserIds}
