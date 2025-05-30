@@ -1,33 +1,22 @@
 import { gql } from "@apollo/client";
 
 export const FETCH_WALLET_TRANSACTIONS = gql(`
-query fetchWalletTransactions($_gte: Datetime!, $_lte: Datetime!) {
-  wallet_transactionsCollection(
-    first: 50
-    filter: {created_at: {gte: $_gte, lte: $_lte}}
-  ) {
-    edges {
-      node {
+    query fetchWalletTransactions($_gte: timestamp = "", $_lte: timestamp = "") {
+    wallet_transactions(where: {created_at: {_gte: $_gte, _lte: $_lte}}) {
         created_at
         amount
-        state
-        user_organizations {
-          users {
+        user_organization {
+        user {
             first_name
-            middle_name
-            last_name
             full_name
-          }
+            last_name
+            middle_name
         }
-        wallets {
-          balance
         }
-      }
+        wallet {
+        balance
+        }
+        state
     }
-    pageInfo {
-      hasNextPage
-      endCursor
     }
-  }
-}
 `);
