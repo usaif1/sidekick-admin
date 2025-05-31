@@ -7,6 +7,7 @@ import modalStore from "@/globalStore/modalStore";
 import { generateMockFirebaseId } from "@/utils/firebaseIdGenerator";
 import { parseCSVToJson } from "@/utils/csvParser";
 import UserAddedModal from "./UserAddedModal";
+import { getOrgIdFromClaims } from "@/utils/claims";
 
 const AddUsersModal: React.FC = () => {
   const [name, setName] = useState<string>("");
@@ -35,6 +36,8 @@ const AddUsersModal: React.FC = () => {
           firebase_id: generateMockFirebaseId(),
         }));
 
+        const orgId = await getOrgIdFromClaims();
+
         const createUserResponse = await createNewUser({
           variables: {
             objects: transformedData,
@@ -49,7 +52,7 @@ const AddUsersModal: React.FC = () => {
 
         const userOrgObjects = insertedUsers.map((user: any) => ({
           user_id: user.id,
-          organization_id: "bbf0dda2-1c0b-4193-9ca0-0f4b45a8f8d0", // hardcoded org ID
+          organization_id: orgId
         }));
 
         const insertedOrgUsers = await createUserOrg({
@@ -96,12 +99,14 @@ const AddUsersModal: React.FC = () => {
       const createdUserId = data?.insert_users?.returning?.[0]?.id;
       if (!createdUserId) throw new Error("User creation failed.");
 
+      const orgId = await getOrgIdFromClaims();
+
       await createUserOrg({
         variables: {
           objects: [
             {
               user_id: createdUserId,
-              organization_id: "bbf0dda2-1c0b-4193-9ca0-0f4b45a8f8d0", // hardcoded org id
+              organization_id: orgId,
             },
           ],
         },

@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const FETCH_ORG_USERS = gql(`
   query fetchOrgUsers {
-    user_organizations(where: {is_active: {_eq: true}, organization_id: {_eq: "15fbefc7-aaa4-4335-ae7d-09bdc8fe3c7b"}}) {
+    user_organizations(where: {is_active: {_eq: true}}) {
       employee_id
       user {
         id

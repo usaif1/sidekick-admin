@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useLazyQuery, useMutation } from "@apollo/client";
 import { FETCH_BLOCKED_USERS } from "@/graphql/queries/fetchBlockedUsers";
 import { ACTIVATE_BLOCKED_USER } from "@/graphql/mutations/activateBlockedUser";
+import { getOrgIdFromClaims } from "@/utils/claims";
 
 const BlockedUsersModal: React.FC = () => {
   const [fetchBlockedUsers, { data, loading, error, refetch }] = useLazyQuery(
@@ -30,9 +31,11 @@ const BlockedUsersModal: React.FC = () => {
 
   const handleUnblock = async (user_id: string) => {
     try {
+      const orgId = await getOrgIdFromClaims();
       await activateBlockedUser({
         variables: {
           user_id,
+          organization_id: orgId
         },
       });
       await refetch(); // Refresh list

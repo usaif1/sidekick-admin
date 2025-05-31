@@ -17,11 +17,7 @@ const Credits: React.FC = () => {
     data: walletData,
     error: walletError,
     loading: walletLoading,
-  } = useQuery(FETCH_WALLET_BALANCE, {
-    variables: {
-      _eq: "15fbefc7-aaa4-4335-ae7d-09bdc8fe3c7b"
-    }
-  });
+  } = useQuery(FETCH_WALLET_BALANCE);
 
   // Memoize the variables so they only change when activeTab changes
   const dateVariables = useMemo(() => getDatesForActiveTab(activeTab), [activeTab]);

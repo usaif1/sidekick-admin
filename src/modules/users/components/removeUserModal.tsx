@@ -3,6 +3,7 @@ import { useLazyQuery, useMutation } from "@apollo/client";
 import { FETCH_ORG_USERS } from "@/graphql/queries/fetchOrgUsers";
 import { REMOVE_USER } from "@/graphql/mutations/removeUser";
 import Table from "./removeUsersTable.tsx";
+import { getOrgIdFromClaims } from "@/utils/claims.ts";
 
 const RemoveUserModal: React.FC = () => {
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
@@ -35,11 +36,13 @@ const RemoveUserModal: React.FC = () => {
 
   const handleRemove = async () => {
     try {
+      const orgId = await getOrgIdFromClaims()
       await Promise.all(
         selectedUserIds.map((user_id) =>
           removeUser({
             variables: {
               user_id,
+              organization_id: orgId
             },
           })
         )
