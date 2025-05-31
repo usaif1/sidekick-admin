@@ -6,7 +6,7 @@ export const FETCH_USER_RIDES_DATA = gql(`
       employee_id
       user {
         full_name
-        wallet {
+        wallets {
           balance
         }
       }
