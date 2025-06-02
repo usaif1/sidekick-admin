@@ -1,11 +1,29 @@
 import React from "react";
 import Table from "../../../components/Navbar/components/userProfileTable.tsx";
 
-type Props = {
-  data: any;
+type ExtraData = {
+  lat: number;
+  lng: number;
+  alt: number;
+  spd: number;
+  brg: number;
+  ang: number;
+  temp: number;
+  motion: boolean;
+  ignition: boolean;
+  mainPower: boolean;
+  relayState: boolean;
+  ts: number;
+  externalVolt: number;
+  imei: number;
 };
 
-const UserProfile: React.FC<Props> = ({ data }) => {
+type Props = {
+  data: any;
+  exraData?: ExtraData;
+};
+
+const UserProfile: React.FC<Props> = ({ data, exraData }) => {
   return (
     <div>
       {/* Header Section */}
@@ -21,7 +39,9 @@ const UserProfile: React.FC<Props> = ({ data }) => {
 
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Battery %</span>
-            <span className="text-gray-700">--</span>
+            <span className="text-gray-700">
+              {exraData?.externalVolt || "--"}
+            </span>
           </div>
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Current Status</span>
