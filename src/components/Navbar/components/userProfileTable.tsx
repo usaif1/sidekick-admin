@@ -26,7 +26,7 @@ const ridesAndTransactionColumns: ColumnDef<RidesAndTransactionData, any>[] = [
   }),
 
   columnHelper.accessor("scooterID", {
-    header: "Scooter ID",
+    header: "Employee ID",
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("duration", {
@@ -39,7 +39,7 @@ const ridesAndTransactionColumns: ColumnDef<RidesAndTransactionData, any>[] = [
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor("walletBalance", {
-    header: "Wallet Balance",
+    header: "Credit Balance",
     cell: (info) => info.getValue(),
   }),
 ];

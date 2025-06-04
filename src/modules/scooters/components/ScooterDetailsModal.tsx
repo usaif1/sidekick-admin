@@ -24,6 +24,8 @@ type Props = {
 };
 
 const UserProfile: React.FC<Props> = ({ data, exraData }) => {
+  console.log("exraData", exraData);
+
   return (
     <div>
       {/* Header Section */}
@@ -45,12 +47,12 @@ const UserProfile: React.FC<Props> = ({ data, exraData }) => {
           </div>
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Current Status</span>
-            <span className="text-gray-700">--</span>
+            <span className="text-gray-700">{exraData?.motion ? "Moving" : "Stopped"}</span>
           </div>
-          <div className="flex gap-4 text-sm">
+          {/* <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Last Serviced</span>
             <span className="text-gray-700">--</span>
-          </div>
+          </div> */}
         </div>
 
         {/* Action Buttons */}

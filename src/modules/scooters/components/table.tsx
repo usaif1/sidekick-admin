@@ -90,11 +90,11 @@ const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
     fetchPolicy: "network-only",
     onCompleted: async (data) => {
       const response = await scooterService.getScooterDetails(data.imei);
+      // const response = await scooterService.toggleScooter(data.imei, true);
+      console.log("response", response);
 
-      if (response.success) {
-        openModal(() => (
-          <ScooterDetailsModal data={data} exraData={response.data} />
-        ));
+      if (response) {
+        openModal(() => <ScooterDetailsModal data={data} exraData={response.data} />);
       } else {
         openModal(() => <ScooterDetailsModal data={data} />);
       }
