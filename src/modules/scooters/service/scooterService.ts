@@ -9,21 +9,14 @@ export const scooterService = {
   getScooterDetails: async (imei: string) => {
     try {
       const response = await axiosClient.post(`/scooter/lastseen`, {
-        imei: `864662073217384`,
+        imei: imei,
       });
 
       if (response.data.success) {
         return response.data.data;
-      //   return {
-      //     success: true,
-      //     data: response.data.data,
-      //   };
-      // } else {
-      //   return {
-      //     success: false,
-      //     data: null,
-      //   };
       }
+
+      return null;
     } catch (error) {
       console.error("Error fetching scooter details:", error);
       return {
@@ -41,15 +34,10 @@ export const scooterService = {
       });
 
       if (response.data.message === "OK") {
-        return response
-      //   return {
-      //     success: true,
-      //   };
-      // } else {
-      //   return {
-      //     success: false,
-      //   };
+        return response;
       }
+
+      return null;
     } catch (error) {
       return {
         success: false,

@@ -8,6 +8,7 @@ export const FETCH_ACTIVE_SCOOTERS = gql`
       id
       latitude
       longitude
+      imei
       ride_details {
         user {
           full_name
