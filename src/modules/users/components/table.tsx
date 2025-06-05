@@ -74,7 +74,7 @@ const TransactionTable: React.FC<UserTableProps> = ({ users }) => {
       return {
         s_no: index + 1,
         name:
-          user.full_name ||
+          user?.full_name ||
           `${user.first_name ?? ""} ${user.middle_name ?? ""} ${
             user.last_name ?? ""
           }`.trim(),

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
 import LabelInput from "@/components/LabelInput";
 import { CREATE_NEW_USER } from "@/graphql/mutations/createUser";
@@ -8,12 +8,16 @@ import { generateMockFirebaseId } from "@/utils/firebaseIdGenerator";
 import { parseCSVToJson } from "@/utils/csvParser";
 import UserAddedModal from "./UserAddedModal";
 import { getOrgIdFromClaims } from "@/utils/claims";
+import usersService from "../service/users.service";
+import homeService from "@/modules/home/service/home.service";
 
 const AddUsersModal: React.FC = () => {
   const [name, setName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [phoneNo, setPhoneNo] = useState<string>("");
+  const [employeeId, setEmployeeId] = useState<string>("");
   const { closeModal, setModalTransitionCallback, openModal } = modalStore();
+  const [currentUser, setCurrentUser] = useState<any>(null);
 
   const [createNewUser, { loading: userLoading, error: userError }] =
     useMutation(CREATE_NEW_USER);
@@ -52,7 +56,7 @@ const AddUsersModal: React.FC = () => {
 
         const userOrgObjects = insertedUsers.map((user: any) => ({
           user_id: user.id,
-          organization_id: orgId
+          organization_id: orgId,
         }));
 
         const insertedOrgUsers = await createUserOrg({
@@ -80,37 +84,62 @@ const AddUsersModal: React.FC = () => {
   };
 
   const handleAddUser = async () => {
-    if (!name || !email) return;
+    // if (!name || !email) return;
+    console.log("phoneNo", phoneNo);
 
     try {
-      const { data } = await createNewUser({
-        variables: {
-          objects: [
-            {
-              full_name: name,
-              email: email,
-              phone_number: `+91${phoneNo}`,
-              firebase_id: generateMockFirebaseId(),
-            },
-          ],
-        },
-      });
+      const existingUser = await usersService.checkIfUserExists(
+        `+91${phoneNo}`
+      );
+      console.log("existingUser", existingUser);
+      if (existingUser) {
+        return;
+      }
 
-      const createdUserId = data?.insert_users?.returning?.[0]?.id;
-      if (!createdUserId) throw new Error("User creation failed.");
+      console.log("currentUser", currentUser);
 
-      const orgId = await getOrgIdFromClaims();
+      const payload = {
+        full_name: name,
+        email: email,
+        phone_number: `+91${phoneNo}`,
+        employee_id: employeeId,
+        organization_id: currentUser?.user_organizations[0]?.organization_id,
+      };
 
-      await createUserOrg({
-        variables: {
-          objects: [
-            {
-              user_id: createdUserId,
-              organization_id: orgId,
-            },
-          ],
-        },
-      });
+      const createdEmployee = await usersService.createEmployee(payload);
+
+      console.log("createdEmployee", createdEmployee);
+
+      // const { data } = await createNewUser({
+      //   variables: {
+      //     objects: [
+      //       {
+      //         full_name: name,
+      //         email: email,
+      //         phone_number: `+91${phoneNo}`,
+      //         firebase_id: generateMockFirebaseId(),
+      //       },
+      //     ],
+      //   },
+      // });
+
+      // const createdUserId = data?.insert_users?.returning?.[0]?.id;
+      // if (!createdUserId) throw new Error("User creation failed.");
+
+      // const orgId = await getOrgIdFromClaims();
+
+      // await createUserOrg({
+      //   variables: {
+      //     objects: [
+      //       {
+      //         user_id: createdUserId,
+      //         organization_id: orgId,
+      //       },
+      //     ],
+      //   },
+      // });
+
+      if (!createdEmployee) return;
 
       setName("");
       setEmail("");
@@ -120,6 +149,14 @@ const AddUsersModal: React.FC = () => {
       console.error("Error creating user or assigning org:", err);
     }
   };
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      const userDetails = await homeService.getManagerProfile();
+      setCurrentUser(userDetails);
+    };
+    fetchUserDetails();
+  }, []);
 
   return (
     <div className="flex flex-col items-center">
@@ -153,6 +190,7 @@ const AddUsersModal: React.FC = () => {
           className="w-96"
           placeholder="XXXX XX XXXX"
           label="Phone Number"
+          maxLength={10}
           value={phoneNo}
           onChange={(e) => {
             const value = e.target.value;
@@ -160,6 +198,17 @@ const AddUsersModal: React.FC = () => {
             if (/^\d*$/.test(value)) {
               setPhoneNo(value);
             }
+          }}
+        />
+        <LabelInput
+          id="employeeId"
+          type="text"
+          className="w-96"
+          placeholder="XXXX XX XXXX"
+          label="Employee ID"
+          value={employeeId}
+          onChange={(e) => {
+            setEmployeeId(e.target.value);
           }}
         />
       </div>

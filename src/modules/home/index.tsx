@@ -6,20 +6,6 @@ import { useQuery } from "@apollo/client";
 import { FETCH_ACTIVE_SCOOTERS } from "@/graphql/queries/fetchActiveScooters";
 import { FETCH_RIDES } from "@/graphql/queries/fetchRides";
 
-type Marker = {
-  lat: number;
-  lng: number;
-};
-
-const getScooterMarkers = (scooters: any[]): Marker[] => {
-  return scooters
-    .filter((scooter) => scooter.latitude && scooter.longitude)
-    .map((scooter) => ({
-      lat: scooter.latitude,
-      lng: scooter.longitude,
-    }));
-};
-
 const HomePage: React.FC = () => {
   const {
     data: scootersData,
@@ -36,11 +22,9 @@ const HomePage: React.FC = () => {
   if (scootersLoading || ridesLoading) return <p>Loading...</p>;
   if (scootersError || ridesError) return <p>Error loading!</p>;
 
-  const markers = getScooterMarkers(scootersData?.scooters || []);
-
   return (
     <div className="flex flex-col pt-4 gap-y-4">
-      <ScootersMap markers={markers} />
+      {scootersData && <ScootersMap scooters={scootersData} />}
       <div className="flex flex-1 justify-center gap-x-4">
         <div className="w-1/2">
           <ScooterTable scooters={scootersData?.scooters || []} />

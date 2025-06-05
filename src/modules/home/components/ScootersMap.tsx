@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { scooterService } from "@/modules/scooters/service/scooterService";
+import { getCurrentLocation } from "@/utils/getCurrentLocation";
 
 type Props = {
-  markers?: { lat: number; lng: number }[];
+  scooters: any;
 };
 
 const containerStyle = {
   width: "100%",
   height: "40vh",
   borderRadius: "0.5rem",
-};
-
-const center = {
-  lat: 28.6139,
-  lng: 77.2090,
 };
 
 const mapOptions = {
@@ -24,11 +21,48 @@ const mapOptions = {
   keyboardShortcuts: false,
 };
 
-const ScootersMap: React.FC<Props> = ({ markers }) => {
+const ScootersMap: React.FC<Props> = ({ scooters }) => {
+  const [markers, setMarkers] = useState<any[]>([]);
+  const [center, setCenter] = useState<any>({
+    lat: 28.6139,
+    lng: 77.209,
+  });
+
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY as string,
   });
+
+  useEffect(() => {
+    getScooterMarkers();
+  }, [scooters]);
+
+  useEffect(() => {
+    getCurrentLocation().then((location) => {
+      setCenter(location);
+    });
+  }, []);
+
+  const getScooterMarkers = () => {
+    const scooterMarkers: any[] = [];
+
+    scooters.scooters.forEach(async (scooter: any) => {
+      const scooterLastSeenData = await scooterService.getScooterDetails(
+        scooter.imei
+      );
+
+      if (scooterLastSeenData) {
+        scooterMarkers.push({
+          lat: scooterLastSeenData.data.lat,
+          lng: scooterLastSeenData.data.lng,
+        });
+      } else {
+        scooterMarkers.push({ lat: scooter.latitude, lng: scooter.longitude });
+      }
+
+      setMarkers(scooterMarkers);
+    });
+  };
 
   return (
     <div className="w-full flex items-center justify-center">

@@ -10,24 +10,24 @@ const Scooters: React.FC = () => {
   >("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-    const {
-      data: scootersData,
-      loading: scootersLoading,
-      error: scootersError,
-    } = useQuery(FETCH_ALL_SCOOTERS);
+  const {
+    data: scootersData,
+    loading: scootersLoading,
+    error: scootersError,
+  } = useQuery(FETCH_ALL_SCOOTERS);
 
   const baseTabStyles =
     "px-4 py-0.5 rounded-lg transition-colors duration-200 cursor-pointer";
 
-    if (scootersLoading) return <p>Loading...</p>;
-    if (scootersError) return <p>Error loading!</p>;
+  if (scootersLoading) return <p>Loading...</p>;
+  if (scootersError) return <p>Error loading!</p>;
 
   return (
     // parent container
     <div>
       {/* <div>Write code for the map part</div> */}
 
-      <ScootersMap />
+      <ScootersMap scooters={scootersData} />
 
       <div className="max-h-fit overflow-auto mt-7 mb-3">
         <h2 className="font-semibold text-lg">Active Users</h2>
