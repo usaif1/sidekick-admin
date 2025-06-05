@@ -29,9 +29,15 @@ export const getToken = () => {
 
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_AXIOS_ENDPOINT,
-  headers: {
-    Authorization: `Bearer ${await getToken()}`,
-  },
+});
+
+// Attach token before every request
+axiosInstance.interceptors.request.use(async (config) => {
+  const token = await getToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
 });
 
 const homeService = {
