@@ -1,11 +1,13 @@
 import React from "react";
-import Table from "../../../components/Navbar/components/userProfileTable.tsx";
+import UserRidesTable from "../../../components/Navbar/components/UserRidesTable";
 
 type Props = {
   data: any;
 };
 
 const UserProfile: React.FC<Props> = ({ data }) => {
+  console.log("data", data);
+
   return (
     <div className="p-5">
       {/* Header Section */}
@@ -29,7 +31,9 @@ const UserProfile: React.FC<Props> = ({ data }) => {
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Wallet Balance</span>
             <span className="text-gray-700">
-              {data.user_organizations[0].user.wallet?.balance ?? "NA"}
+              {data.user_organizations[0].user.wallets[0]?.balance >= 0
+                ? `${data.user_organizations[0].user.wallets[0]?.balance} credits`
+                : "NA"}
             </span>
           </div>
         </div>
@@ -50,7 +54,7 @@ const UserProfile: React.FC<Props> = ({ data }) => {
         <h2 className="text-lg font-semibold mb-4">
           Recent Rides & Transactions
         </h2>
-        <Table />
+        <UserRidesTable userRides={data.ride_details} />
       </div>
 
       {/* Bottom CTA */}

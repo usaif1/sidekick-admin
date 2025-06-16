@@ -110,36 +110,10 @@ const AddUsersModal: React.FC = () => {
 
       console.log("createdEmployee", createdEmployee);
 
-      // const { data } = await createNewUser({
-      //   variables: {
-      //     objects: [
-      //       {
-      //         full_name: name,
-      //         email: email,
-      //         phone_number: `+91${phoneNo}`,
-      //         firebase_id: generateMockFirebaseId(),
-      //       },
-      //     ],
-      //   },
-      // });
-
-      // const createdUserId = data?.insert_users?.returning?.[0]?.id;
-      // if (!createdUserId) throw new Error("User creation failed.");
-
-      // const orgId = await getOrgIdFromClaims();
-
-      // await createUserOrg({
-      //   variables: {
-      //     objects: [
-      //       {
-      //         user_id: createdUserId,
-      //         organization_id: orgId,
-      //       },
-      //     ],
-      //   },
-      // });
-
-      if (!createdEmployee) return;
+      if (!createdEmployee) {
+        alert("User already exists");
+        return;
+      }
 
       setName("");
       setEmail("");
