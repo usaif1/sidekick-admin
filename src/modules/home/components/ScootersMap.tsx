@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from "@react-google-maps/api";
 import { scooterService } from "@/modules/scooters/service/scooterService";
 import { getCurrentLocation } from "@/utils/getCurrentLocation";
 
@@ -27,6 +27,7 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
     lat: 28.6139,
     lng: 77.209,
   });
+  const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -43,25 +44,55 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
     });
   }, []);
 
-  const getScooterMarkers = () => {
+  const isValidCoordinate = (lat: any, lng: any): boolean => {
+    return (
+      typeof lat === 'number' &&
+      typeof lng === 'number' &&
+      !isNaN(lat) &&
+      !isNaN(lng) &&
+      lat >= -90 &&
+      lat <= 90 &&
+      lng >= -180 &&
+      lng <= 180
+    );
+  };
+
+  const getScooterMarkers = async () => {
     const scooterMarkers: any[] = [];
 
-    scooters.scooters.forEach(async (scooter: any) => {
-      const scooterLastSeenData = await scooterService.getScooterDetails(
-        scooter.imei
-      );
+    for (const scooter of scooters.scooters) {
+      try {
+        console.log('Fetching details for scooter:', scooter.imei);
+        const scooterLastSeenData = await scooterService.getScooterDetails(scooter.imei);
+        console.log('Scooter last seen data:', scooterLastSeenData);
 
-      if (scooterLastSeenData) {
-        scooterMarkers.push({
-          lat: scooterLastSeenData.data.lat,
-          lng: scooterLastSeenData.data.lng,
-        });
-      } else {
-        scooterMarkers.push({ lat: scooter.latitude, lng: scooter.longitude });
+        let lat, lng;
+
+        if (scooterLastSeenData?.data) {
+          lat = parseFloat(scooterLastSeenData.data.lat);
+          lng = parseFloat(scooterLastSeenData.data.lng);
+        } else {
+          lat = parseFloat(scooter.latitude);
+          lng = parseFloat(scooter.longitude);
+        }
+
+        if (isValidCoordinate(lat, lng)) {
+          scooterMarkers.push({
+            lat,
+            lng,
+            imei: scooter.imei,
+            registration_number: scooter.registration_number
+          });
+        } else {
+          console.warn('Invalid coordinates for scooter:', scooter.imei, { lat, lng });
+        }
+      } catch (error) {
+        console.error('Error fetching scooter details:', error);
       }
+    }
 
-      setMarkers(scooterMarkers);
-    });
+    console.log('Final markers array:', scooterMarkers);
+    setMarkers(scooterMarkers);
   };
 
   return (
@@ -75,7 +106,26 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
         >
           {/* Render each marker */}
           {markers?.map((marker, index) => (
-            <Marker key={index} position={marker} />
+            <React.Fragment key={index}>
+              <Marker 
+                position={marker} 
+                onClick={() => setSelectedMarker(index)}
+              />
+              {selectedMarker === index && (
+                <InfoWindow
+                  position={marker}
+                  onCloseClick={() => setSelectedMarker(null)}
+                >
+                  <div className="p-2">
+                    <p className="font-semibold">Scooter Details</p>
+                    <p>Registration: {marker.registration_number}</p>
+                    <p>IMEI: {marker.imei}</p>
+                    <p>Latitude: {marker.lat.toFixed(6)}</p>
+                    <p>Longitude: {marker.lng.toFixed(6)}</p>
+                  </div>
+                </InfoWindow>
+              )}
+            </React.Fragment>
           ))}
         </GoogleMap>
       ) : (

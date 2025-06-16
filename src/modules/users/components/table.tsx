@@ -93,6 +93,8 @@ const TransactionTable: React.FC<UserTableProps> = ({ users }) => {
   const [fetchUserRidesData] = useLazyQuery(FETCH_USER_RIDES_DATA, {
     fetchPolicy: "network-only",
     onCompleted: (data) => {
+      console.log("data", data);
+
       openModal(() => <UserProfile data={data} />);
     },
     onError: (err) => {

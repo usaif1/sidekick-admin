@@ -7,6 +7,7 @@ import modalStore from "@/globalStore/modalStore";
 import ScooterDetailsModal from "./ScooterDetailsModal";
 import { DateTime } from "luxon";
 import { scooterService } from "../service/scooterService";
+import { getOrgIdFromClaims } from "@/utils/claims";
 
 type ScootersData = {
   s_no: number;
@@ -50,6 +51,7 @@ const scooterColumns: ColumnDef<ScootersData, any>[] = [
       try {
         return DateTime.fromISO(value).toFormat("dd-MM-yyyy");
       } catch (error) {
+        console.log("error", error);
         return value; // Return original value if parsing fails
       }
     },
@@ -89,12 +91,17 @@ const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
   const [fetchRecentRides] = useLazyQuery(FETCH_RECENT_RIDES, {
     fetchPolicy: "network-only",
     onCompleted: async (data) => {
-      const response = await scooterService.getScooterDetails(data.imei);
+      console.log("data", data);
+      const response = await scooterService.getScooterDetails(
+        data?.scooters[0]?.imei
+      );
       // const response = await scooterService.toggleScooter(data.imei, true);
       console.log("response", response);
 
       if (response) {
-        openModal(() => <ScooterDetailsModal data={data} exraData={response.data} />);
+        openModal(() => (
+          <ScooterDetailsModal data={data} extraData={response.data} />
+        ));
       } else {
         openModal(() => <ScooterDetailsModal data={data} />);
       }
@@ -104,9 +111,13 @@ const ScooterTable: React.FC<ScootersTableProps> = ({ scooters }) => {
     },
   });
 
-  const handleRowClick = (rowData: ScootersData) => {
+  const handleRowClick = async (rowData: ScootersData) => {
+    const orgId = await getOrgIdFromClaims();
+
     if (rowData.scooter_id) {
-      fetchRecentRides({ variables: { scooterId: rowData.scooter_id } });
+      fetchRecentRides({
+        variables: { scooterId: rowData.scooter_id, organization_id: orgId },
+      });
     }
   };
   return (

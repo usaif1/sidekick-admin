@@ -1,5 +1,5 @@
 import React from "react";
-import Table from "../../../components/Navbar/components/userProfileTable.tsx";
+import ScooterRidesTable from "../../../components/Navbar/components/ScooterRidesTable.tsx";
 
 type ExtraData = {
   lat: number;
@@ -20,11 +20,11 @@ type ExtraData = {
 
 type Props = {
   data: any;
-  exraData?: ExtraData;
+  extraData?: ExtraData;
 };
 
-const UserProfile: React.FC<Props> = ({ data, exraData }) => {
-  console.log("exraData", exraData);
+const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
+  console.log("extraData", extraData);
 
   return (
     <div>
@@ -42,12 +42,14 @@ const UserProfile: React.FC<Props> = ({ data, exraData }) => {
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Battery %</span>
             <span className="text-gray-700">
-              {exraData?.externalVolt || "--"}
+              {extraData?.externalVolt || "Battery status not available"}
             </span>
           </div>
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Current Status</span>
-            <span className="text-gray-700">{exraData?.motion ? "Moving" : "Stopped"}</span>
+            <span className="text-gray-700">
+              {extraData?.motion ? "Moving" : "Stopped"}
+            </span>
           </div>
           {/* <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">Last Serviced</span>
@@ -69,7 +71,7 @@ const UserProfile: React.FC<Props> = ({ data, exraData }) => {
       {/* Recent Rides Table */}
       <div className="mt-8">
         <h2 className="text-lg font-semibold mb-4">Recent Rides</h2>
-        <Table />
+        <ScooterRidesTable rides={data.ride_details} />
       </div>
 
       {/* Servicing CTA */}
@@ -82,4 +84,4 @@ const UserProfile: React.FC<Props> = ({ data, exraData }) => {
   );
 };
 
-export default UserProfile;
+export default ScooterDetailsModal;

@@ -19,9 +19,7 @@ const columnHelper = createColumnHelper<ScooterData>();
 // Define columns based on the updated type
 const scooterColumns: ColumnDef<ScooterData, any>[] = [
   columnHelper.accessor("registration_number", {
-    header: () => (
-      <div className="flex items-center">Scooter</div>
-    ),
+    header: () => <div className="flex items-center">Scooter</div>,
     cell: (info) => info.getValue(),
   }),
   // New column: display user full name from the first ride
@@ -33,9 +31,7 @@ const scooterColumns: ColumnDef<ScooterData, any>[] = [
   // Optionally display the id column
   columnHelper.accessor("battery", {
     header: "Battery",
-    cell: () => <p>
-      XXXX
-    </p>,
+    cell: () => <p>XXXX</p>,
   }),
 ];
 
