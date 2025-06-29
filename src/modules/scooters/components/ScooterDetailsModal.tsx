@@ -1,5 +1,6 @@
 import React from "react";
 import ScooterRidesTable from "../../../components/Navbar/components/ScooterRidesTable.tsx";
+import DateRangeSelector from "@/components/DateRangeSelector";
 
 type ExtraData = {
   lat: number;
@@ -32,10 +33,15 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
 
   const distanceTravelled = kmFromMeters(6964.851914820795);
 
+  const handleDateRangeChange = (fromDate: string, toDate: string) => {
+    console.log("Date range changed:", { fromDate, toDate });
+    // Here you can implement logic to filter/recalculate distance based on date range
+  };
+
   return (
     <div>
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-start mt-6 gap-4">
         {/* Scooter Info */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
@@ -57,12 +63,30 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
               {extraData?.motion ? "Moving" : "Stopped"}
             </span>
           </div>
+
+          <div className="h-[1px] w-full bg-gray-300 rounded-full mt-4" />
+          {/* <p className="text-lg font-bold">Distance travelled by scooter</p> */}
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">
-              Distance travelled today
+              Distance travelled
             </span>
             <span className="text-gray-700">{distanceTravelled} km</span>
           </div>
+
+          {/* Date Range Selector */}
+          <div className="mt-2 mb-2">
+            <DateRangeSelector
+              onDateRangeChange={handleDateRangeChange}
+              className="flex-wrap"
+            />
+          </div>
+
+          {/* <div className="flex gap-4 text-sm">
+            <span className="text-blue-600 font-semibold">
+              Distance travelled
+            </span>
+            <span className="text-gray-700">{distanceTravelled} km</span>
+          </div> */}
         </div>
 
         {/* Action Buttons */}
