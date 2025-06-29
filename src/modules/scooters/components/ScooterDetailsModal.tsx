@@ -26,6 +26,12 @@ type Props = {
 const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
   console.log("extraData", extraData);
 
+  const kmFromMeters = (meters: number) => {
+    return (meters / 1000).toFixed(2);
+  };
+
+  const distanceTravelled = kmFromMeters(6964.851914820795);
+
   return (
     <div>
       {/* Header Section */}
@@ -51,10 +57,12 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
               {extraData?.motion ? "Moving" : "Stopped"}
             </span>
           </div>
-          {/* <div className="flex gap-4 text-sm">
-            <span className="text-blue-600 font-semibold">Last Serviced</span>
-            <span className="text-gray-700">--</span>
-          </div> */}
+          <div className="flex gap-4 text-sm">
+            <span className="text-blue-600 font-semibold">
+              Distance travelled today
+            </span>
+            <span className="text-gray-700">{distanceTravelled} km</span>
+          </div>
         </div>
 
         {/* Action Buttons */}
