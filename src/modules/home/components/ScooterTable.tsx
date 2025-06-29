@@ -31,7 +31,23 @@ const scooterColumns: ColumnDef<ScooterData, any>[] = [
   // Optionally display the id column
   columnHelper.accessor("battery", {
     header: "Battery",
-    cell: () => <p>XXXX</p>,
+    cell: () => <p>NA</p>,
+  }),
+  // New column: Scooter details button with no header
+  columnHelper.display({
+    id: "scooter_details",
+    header: "",
+    cell: () => (
+      <button
+        className="bg-blue-500 text-white font-bold px-3 py-1 rounded text-sm hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+        onClick={(e) => {
+          e.stopPropagation();
+          // Add your click handler logic here
+        }}
+      >
+        View
+      </button>
+    ),
   }),
 ];
 
