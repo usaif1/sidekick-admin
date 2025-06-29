@@ -1,6 +1,8 @@
 import React from "react";
 import ScooterRidesTable from "../../../components/Navbar/components/ScooterRidesTable.tsx";
 import DateRangeSelector from "@/components/DateRangeSelector";
+import modalStore from "@/globalStore/modalStore";
+import mapStore from "@/globalStore/mapStore";
 
 type ExtraData = {
   lat: number;
@@ -27,6 +29,9 @@ type Props = {
 const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
   console.log("extraData", extraData);
 
+  const { closeModal } = modalStore();
+  const { setTargetLocation } = mapStore();
+
   const kmFromMeters = (meters: number) => {
     return (meters / 1000).toFixed(2);
   };
@@ -38,10 +43,28 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
     // Here you can implement logic to filter/recalculate distance based on date range
   };
 
+  const handleLocateOnMap = () => {
+    // Get scooter location from extraData if available
+    if (extraData && extraData.lat && extraData.lng) {
+      // Set the target location for the map to pan to
+      setTargetLocation({
+        lat: extraData.lat,
+        lng: extraData.lng,
+        zoom: 16, // Zoom in closer to show the scooter location
+      });
+      
+      // Close the modal
+      closeModal();
+    } else {
+      console.warn("Scooter location data not available");
+      // You could show a toast notification here
+    }
+  };
+
   return (
     <div>
       {/* Header Section */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-start mt-6 gap-4">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mt-6 gap-4">
         {/* Scooter Info */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
@@ -68,7 +91,7 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
           {/* <p className="text-lg font-bold">Distance travelled by scooter</p> */}
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">
-              Distance travelled
+              Distance travelled today
             </span>
             <span className="text-gray-700">{distanceTravelled} km</span>
           </div>
@@ -91,7 +114,10 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-2 md:mt-0">
-          <button className="bg-gray-100 text-sm font-medium px-5 py-2 rounded-full shadow-sm hover:bg-gray-200 transition">
+          <button 
+            className="bg-gray-100 text-sm font-medium px-5 py-2 rounded-full shadow-sm hover:bg-gray-200 transition"
+            onClick={handleLocateOnMap}
+          >
             Locate on Map
           </button>
           <button className="bg-green-400 text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-green-500 transition">

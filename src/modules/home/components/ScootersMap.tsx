@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GoogleMap, useJsApiLoader, Marker, InfoWindow } from "@react-google-maps/api";
 import { scooterService } from "@/modules/scooters/service/scooterService";
 import { getCurrentLocation } from "@/utils/getCurrentLocation";
+import mapStore from "@/globalStore/mapStore";
 
 type Props = {
   scooters: any;
@@ -19,6 +20,75 @@ const mapOptions = {
   scrollwheel: true,
   disableDoubleClickZoom: false,
   keyboardShortcuts: false,
+  styles: [
+    // Hide all POI (Points of Interest) labels except buildings
+    {
+      featureType: "poi",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }]
+    },
+    // Hide specific POI categories
+    {
+      featureType: "poi.attraction",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.business",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.government",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.medical",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.park",
+      elementType: "labels",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.place_of_worship",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.school",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "poi.sports_complex",
+      stylers: [{ visibility: "off" }]
+    },
+    // Hide transit stations (metro, bus, etc.)
+    {
+      featureType: "transit.station",
+      stylers: [{ visibility: "off" }]
+    },
+    {
+      featureType: "transit.line",
+      stylers: [{ visibility: "off" }]
+    },
+    // Keep building labels visible but make them subtle
+    {
+      featureType: "poi.business",
+      elementType: "labels.text.fill",
+      stylers: [{ visibility: "on" }, { color: "#666666" }]
+    },
+    // Keep road labels clean and visible
+    {
+      featureType: "road",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#333333" }]
+    },
+    // Keep area labels (neighborhoods, etc.) visible but subtle
+    {
+      featureType: "administrative.neighborhood",
+      elementType: "labels.text.fill",
+      stylers: [{ color: "#888888" }]
+    }
+  ]
 };
 
 const ScootersMap: React.FC<Props> = ({ scooters }) => {
@@ -28,6 +98,12 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
     lng: 77.209,
   });
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
+  const [zoom, setZoom] = useState<number>(12);
+
+  // Get map store state
+  const targetLocation = mapStore.use.targetLocation();
+  const shouldPanToLocation = mapStore.use.shouldPanToLocation();
+  const { clearTargetLocation } = mapStore();
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -43,6 +119,21 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
       setCenter(location);
     });
   }, []);
+
+  // Listen for location panning requests
+  useEffect(() => {
+    if (shouldPanToLocation && targetLocation) {
+      setCenter({
+        lat: targetLocation.lat,
+        lng: targetLocation.lng,
+      });
+      if (targetLocation.zoom) {
+        setZoom(targetLocation.zoom);
+      }
+      // Clear the target location after panning
+      clearTargetLocation();
+    }
+  }, [shouldPanToLocation, targetLocation, clearTargetLocation]);
 
   const isValidCoordinate = (lat: any, lng: any): boolean => {
     return (
@@ -101,7 +192,7 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
         <GoogleMap
           mapContainerStyle={containerStyle}
           center={center}
-          zoom={12}
+          zoom={zoom}
           options={mapOptions}
         >
           {/* Render each marker */}
