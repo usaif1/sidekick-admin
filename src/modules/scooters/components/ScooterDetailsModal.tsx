@@ -64,7 +64,7 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
             </span>
           </div>
 
-          <div className="h-[1px] w-full bg-gray-300 rounded-full mt-4" />
+          <div className="h-[1px] w-full bg-gray-300 rounded-full mt-2" />
           {/* <p className="text-lg font-bold">Distance travelled by scooter</p> */}
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">
