@@ -93,12 +93,10 @@ const mapOptions = {
 
 const ScootersMap: React.FC<Props> = ({ scooters }) => {
   const [markers, setMarkers] = useState<any[]>([]);
-  const [center, setCenter] = useState<any>({
-    lat: 28.6139,
-    lng: 77.209,
-  });
+  const [center, setCenter] = useState<any>(null);
   const [selectedMarker, setSelectedMarker] = useState<number | null>(null);
   const [zoom, setZoom] = useState<number>(12);
+  const [isLocationLoading, setIsLocationLoading] = useState<boolean>(true);
 
   // Get map store state
   const targetLocation = mapStore.use.targetLocation();
@@ -115,9 +113,22 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
   }, [scooters]);
 
   useEffect(() => {
-    getCurrentLocation().then((location) => {
-      setCenter(location);
-    });
+    // Request user location with proper loading state
+    const initializeLocation = async () => {
+      setIsLocationLoading(true);
+      try {
+        const location = await getCurrentLocation();
+        setCenter(location);
+      } catch (error) {
+        console.error("Error getting location:", error);
+        // Fallback to default location
+        setCenter({ lat: 28.6139, lng: 77.209 });
+      } finally {
+        setIsLocationLoading(false);
+      }
+    };
+
+    initializeLocation();
   }, []);
 
   // Listen for location panning requests
@@ -186,44 +197,55 @@ const ScootersMap: React.FC<Props> = ({ scooters }) => {
     setMarkers(scooterMarkers);
   };
 
+  // Show loading state while location is being determined or Google Maps is loading
+  if (!isLoaded || isLocationLoading || !center) {
+    return (
+      <div className="w-full h-[40vh] bg-gray-100 rounded-lg flex flex-col items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-3"></div>
+        <p className="text-gray-600 text-sm">
+          {isLocationLoading ? "Getting your location..." : "Loading map..."}
+        </p>
+        {isLocationLoading && (
+          <p className="text-gray-500 text-xs mt-1">
+            Please allow location access for better experience
+          </p>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="w-full flex items-center justify-center">
-      {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={zoom}
-          options={mapOptions}
-        >
-          {/* Render each marker */}
-          {markers?.map((marker, index) => (
-            <React.Fragment key={index}>
-              <Marker 
-                position={marker} 
-                onClick={() => setSelectedMarker(index)}
-              />
-              {selectedMarker === index && (
-                <InfoWindow
-                  position={marker}
-                  onCloseClick={() => setSelectedMarker(null)}
-                >
-                  <div className="p-2">
-                    <p className="font-semibold">Scooter Details</p>
-                    <p>Registration: {marker.registration_number}</p>
-                    <p>IMEI: {marker.imei}</p>
-                    <p>Latitude: {marker.lat.toFixed(6)}</p>
-                    <p>Longitude: {marker.lng.toFixed(6)}</p>
-                  </div>
-                </InfoWindow>
-              )}
-            </React.Fragment>
-          ))}
-        </GoogleMap>
-      ) : (
-        <div className="w-full h-[40vh] bg-gray-300 rounded-lg flex items-center justify-center">
-          Loading map...
-        </div>
-      )}
+      <GoogleMap
+        mapContainerStyle={containerStyle}
+        center={center}
+        zoom={zoom}
+        options={mapOptions}
+      >
+        {/* Render each marker */}
+        {markers?.map((marker, index) => (
+          <React.Fragment key={index}>
+            <Marker 
+              position={marker} 
+              onClick={() => setSelectedMarker(index)}
+            />
+            {selectedMarker === index && (
+              <InfoWindow
+                position={marker}
+                onCloseClick={() => setSelectedMarker(null)}
+              >
+                <div className="p-2">
+                  <p className="font-semibold">Scooter Details</p>
+                  <p>Registration: {marker.registration_number}</p>
+                  <p>IMEI: {marker.imei}</p>
+                  <p>Latitude: {marker.lat.toFixed(6)}</p>
+                  <p>Longitude: {marker.lng.toFixed(6)}</p>
+                </div>
+              </InfoWindow>
+            )}
+          </React.Fragment>
+        ))}
+      </GoogleMap>
     </div>
   );
 };
