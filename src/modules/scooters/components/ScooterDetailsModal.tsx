@@ -1,5 +1,8 @@
 import React from "react";
 import ScooterRidesTable from "../../../components/Navbar/components/ScooterRidesTable.tsx";
+import DateRangeSelector from "@/components/DateRangeSelector";
+import modalStore from "@/globalStore/modalStore";
+import mapStore from "@/globalStore/mapStore";
 
 type ExtraData = {
   lat: number;
@@ -26,6 +29,38 @@ type Props = {
 const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
   console.log("extraData", extraData);
 
+  const { closeModal } = modalStore();
+  const { setTargetLocation } = mapStore();
+
+  const kmFromMeters = (meters: number) => {
+    return (meters / 1000).toFixed(2);
+  };
+
+  const distanceTravelled = kmFromMeters(6964.851914820795);
+
+  const handleDateRangeChange = (fromDate: string, toDate: string) => {
+    console.log("Date range changed:", { fromDate, toDate });
+    // Here you can implement logic to filter/recalculate distance based on date range
+  };
+
+  const handleLocateOnMap = () => {
+    // Get scooter location from extraData if available
+    if (extraData && extraData.lat && extraData.lng) {
+      // Set the target location for the map to pan to
+      setTargetLocation({
+        lat: extraData.lat,
+        lng: extraData.lng,
+        zoom: 16, // Zoom in closer to show the scooter location
+      });
+      
+      // Close the modal
+      closeModal();
+    } else {
+      console.warn("Scooter location data not available");
+      // You could show a toast notification here
+    }
+  };
+
   return (
     <div>
       {/* Header Section */}
@@ -51,15 +86,38 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
               {extraData?.motion ? "Moving" : "Stopped"}
             </span>
           </div>
+
+          <div className="h-[1px] w-full bg-gray-300 rounded-full mt-2" />
+          {/* <p className="text-lg font-bold">Distance travelled by scooter</p> */}
+          <div className="flex gap-4 text-sm">
+            <span className="text-blue-600 font-semibold">
+              Distance travelled today
+            </span>
+            <span className="text-gray-700">{distanceTravelled} km</span>
+          </div>
+
+          {/* Date Range Selector */}
+          <div className="mt-2 mb-2">
+            <DateRangeSelector
+              onDateRangeChange={handleDateRangeChange}
+              className="flex-wrap"
+            />
+          </div>
+
           {/* <div className="flex gap-4 text-sm">
-            <span className="text-blue-600 font-semibold">Last Serviced</span>
-            <span className="text-gray-700">--</span>
+            <span className="text-blue-600 font-semibold">
+              Distance travelled
+            </span>
+            <span className="text-gray-700">{distanceTravelled} km</span>
           </div> */}
         </div>
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-2 md:mt-0">
-          <button className="bg-gray-100 text-sm font-medium px-5 py-2 rounded-full shadow-sm hover:bg-gray-200 transition">
+          <button 
+            className="bg-gray-100 text-sm font-medium px-5 py-2 rounded-full shadow-sm hover:bg-gray-200 transition"
+            onClick={handleLocateOnMap}
+          >
             Locate on Map
           </button>
           <button className="bg-green-400 text-white text-sm font-medium px-5 py-2 rounded-full hover:bg-green-500 transition">
