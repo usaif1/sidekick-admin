@@ -52,7 +52,7 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
         lng: extraData.lng,
         zoom: 16, // Zoom in closer to show the scooter location
       });
-      
+
       // Close the modal
       closeModal();
     } else {
@@ -91,7 +91,7 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
           {/* <p className="text-lg font-bold">Distance travelled by scooter</p> */}
           <div className="flex gap-4 text-sm">
             <span className="text-blue-600 font-semibold">
-              Distance travelled today
+              Distance travelled
             </span>
             <span className="text-gray-700">{distanceTravelled} km</span>
           </div>
@@ -114,7 +114,7 @@ const ScooterDetailsModal: React.FC<Props> = ({ data, extraData }) => {
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-2 md:mt-0">
-          <button 
+          <button
             className="bg-gray-100 text-sm font-medium px-5 py-2 rounded-full shadow-sm hover:bg-gray-200 transition"
             onClick={handleLocateOnMap}
           >
