@@ -116,16 +116,21 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
       const response = await axios.post(
         "https://sidekick-backend-279t.onrender.com/api/scooter/get-stats",
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            imei: imei,
-            fromTime: fromTimeMs,
-            toTime: toTimeMs,
-          }),
+          imei: imei,
+          fromTime: fromTimeMs,
+          toTime: toTimeMs,
         }
+        // {
+        //   method: "POST",
+        //   headers: {
+        //     "Content-Type": "application/json",
+        //   },
+        //   body: JSON.stringify({
+        //     imei: imei,
+        //     fromTime: fromTimeMs,
+        //     toTime: toTimeMs,
+        //   }),
+        // }
       );
 
       const result = await response.data;
