@@ -61,22 +61,20 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
   const [showFromPicker, setShowFromPicker] = useState<boolean>(false);
   const [showToPicker, setShowToPicker] = useState<boolean>(false);
 
-  // Close date pickers when clicking outside
+  // Only close on Escape key - no automatic click-outside closing
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-
-      // Check if click is outside date pickers
-      if (!target.closest("[data-date-picker]")) {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
         setShowFromPicker(false);
         setShowToPicker(false);
       }
     };
 
     if (showFromPicker || showToPicker) {
-      document.addEventListener("mousedown", handleClickOutside);
-      return () =>
-        document.removeEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+      return () => {
+        document.removeEventListener("keydown", handleKeyDown);
+      };
     }
   }, [showFromPicker, showToPicker]);
 
@@ -90,7 +88,6 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
   const handleFromDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newFromDate = e.target.value;
     setFromDate(newFromDate);
-    setShowFromPicker(false);
     if (onDateRangeChange) {
       onDateRangeChange(newFromDate, toDate);
     }
@@ -99,7 +96,6 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
   const handleToDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newToDate = e.target.value;
     setToDate(newToDate);
-    setShowToPicker(false);
     if (onDateRangeChange) {
       onDateRangeChange(fromDate, newToDate);
     }
@@ -172,18 +168,6 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 onChange={handleFromDateChange}
                 className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 autoFocus
-                onBlur={(e) => {
-                  // Delay closing to allow for calendar interactions
-                  setTimeout(() => {
-                    // Check if the new focused element is not part of the date picker
-                    if (
-                      !e.relatedTarget ||
-                      !e.currentTarget.contains(e.relatedTarget as Node)
-                    ) {
-                      setShowFromPicker(false);
-                    }
-                  }, 150);
-                }}
               />
               <button
                 type="button"
@@ -219,18 +203,6 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                 className="px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
                 min={fromDate} // Ensure "to" date is not before "from" date
                 autoFocus
-                onBlur={(e) => {
-                  // Delay closing to allow for calendar interactions
-                  setTimeout(() => {
-                    // Check if the new focused element is not part of the date picker
-                    if (
-                      !e.relatedTarget ||
-                      !e.currentTarget.contains(e.relatedTarget as Node)
-                    ) {
-                      setShowToPicker(false);
-                    }
-                  }, 150);
-                }}
               />
               <button
                 type="button"
