@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState, useEffect } from "react";
 
 interface DateRangeSelectorProps {
@@ -64,17 +65,18 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as Element;
-      
+
       // Check if click is outside date pickers
-      if (!target.closest('[data-date-picker]')) {
+      if (!target.closest("[data-date-picker]")) {
         setShowFromPicker(false);
         setShowToPicker(false);
       }
     };
 
     if (showFromPicker || showToPicker) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [showFromPicker, showToPicker]);
 
@@ -105,6 +107,7 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
 
   const handleViewClick = async () => {
     if (!imei) {
+      alert("IMEI is required for fetching scooter stats");
       console.warn("IMEI is required for fetching scooter stats");
       return;
     }
@@ -114,32 +117,32 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
       const fromTimeMs = new Date(fromDate).getTime();
       const toTimeMs = new Date(toDate).getTime();
 
-      const response = await fetch('http://localhost:3000/api/scooter/get-stats', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          imei: imei,
-          fromTime: fromTimeMs,
-          toTime: toTimeMs,
-        }),
-      });
+      const response = await axios.post(
+        "https://sidekick-backend-279t.onrender.com/api/scooter/get-stats",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            imei: imei,
+            fromTime: fromTimeMs,
+            toTime: toTimeMs,
+          }),
+        }
+      );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      const result = await response.data;
 
-      const result = await response.json();
-      
       if (result.success && result.data?.data && result.data.data.length > 0) {
         const distance = result.data.data[0].dst; // Distance in meters
         console.log("Distance updated:", distance, "meters");
-        
+
         if (onDistanceUpdate) {
           onDistanceUpdate(distance);
         }
       } else {
+        alert("Please select a valid date range");
         console.warn("No data found in API response");
       }
     } catch (error) {
@@ -173,7 +176,10 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                   // Delay closing to allow for calendar interactions
                   setTimeout(() => {
                     // Check if the new focused element is not part of the date picker
-                    if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget as Node)) {
+                    if (
+                      !e.relatedTarget ||
+                      !e.currentTarget.contains(e.relatedTarget as Node)
+                    ) {
                       setShowFromPicker(false);
                     }
                   }, 150);
@@ -217,7 +223,10 @@ const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
                   // Delay closing to allow for calendar interactions
                   setTimeout(() => {
                     // Check if the new focused element is not part of the date picker
-                    if (!e.relatedTarget || !e.currentTarget.contains(e.relatedTarget as Node)) {
+                    if (
+                      !e.relatedTarget ||
+                      !e.currentTarget.contains(e.relatedTarget as Node)
+                    ) {
                       setShowToPicker(false);
                     }
                   }, 150);
